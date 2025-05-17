@@ -9,17 +9,19 @@ import os
 import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox
 import threading
+from datetime import datetime
+import customtkinter as ctk
 
 # Configuration
 SEUIL_VARIATION = 5  # Seuil de variation en pourcentage
-INTERVALLE_VERIFICATION = 10  # Intervalle de vérification en minutes
-FICHIER_PRIX = 'dernier_prix.json'
+INTERVALLE_VERIFICATION = 10  # Intervalle de vérification en secondes
+FICHIER_PRIX = 'historique_prix.json'
 
 # Configuration email (à remplir avec vos informations)
 EMAIL_CONFIG = {
     'expediteur': 'votre_email@gmail.com',
     'destinataire': 'destinataire@email.com',
-    'mot_de_passe': 'votre_mot_de_passe_application',  # Mot de passe d'application Gmail
+    'mot_de_passe': 'votre_mot_de_passe_application',
     'smtp_serveur': 'smtp.gmail.com',
     'smtp_port': 587
 }
@@ -28,71 +30,170 @@ class BitcoinAlerteGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Surveillance du Prix Bitcoin")
-        self.root.geometry("800x600")
+        self.root.geometry("1200x800")
+        
+        # Configuration du thème
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
         
         # Variables
         self.thread_surveillance = None
         self.surveillance_active = False
+        self.historique_prix = []
+        self.historique_temps = []
         
         # Création de l'interface
         self.creer_interface()
         
     def creer_interface(self):
         # Frame principal
-        main_frame = ttk.Frame(self.root, padding="10")
-        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        main_frame = ctk.CTkFrame(self.root)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # Configuration des colonnes
-        self.root.columnconfigure(0, weight=1)
-        self.root.rowconfigure(0, weight=1)
-        main_frame.columnconfigure(1, weight=1)
+        # Frame gauche pour les contrôles
+        frame_gauche = ctk.CTkFrame(main_frame)
+        frame_gauche.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5)
         
         # Configuration email
-        ttk.Label(main_frame, text="Configuration Email", font=('Helvetica', 12, 'bold')).grid(row=0, column=0, columnspan=2, pady=10)
+        ctk.CTkLabel(frame_gauche, text="Configuration Email", font=("Helvetica", 16, "bold")).pack(pady=10)
         
         # Champs email
-        ttk.Label(main_frame, text="Email expéditeur:").grid(row=1, column=0, sticky=tk.W, pady=5)
-        self.email_expediteur = ttk.Entry(main_frame, width=40)
-        self.email_expediteur.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=5)
+        ctk.CTkLabel(frame_gauche, text="Email expéditeur:").pack(pady=5)
+        self.email_expediteur = ctk.CTkEntry(frame_gauche, width=300)
+        self.email_expediteur.pack(pady=5)
         self.email_expediteur.insert(0, EMAIL_CONFIG['expediteur'])
         
-        ttk.Label(main_frame, text="Email destinataire:").grid(row=2, column=0, sticky=tk.W, pady=5)
-        self.email_destinataire = ttk.Entry(main_frame, width=40)
-        self.email_destinataire.grid(row=2, column=1, sticky=(tk.W, tk.E), pady=5)
+        ctk.CTkLabel(frame_gauche, text="Email destinataire:").pack(pady=5)
+        self.email_destinataire = ctk.CTkEntry(frame_gauche, width=300)
+        self.email_destinataire.pack(pady=5)
         self.email_destinataire.insert(0, EMAIL_CONFIG['destinataire'])
         
-        ttk.Label(main_frame, text="Mot de passe:").grid(row=3, column=0, sticky=tk.W, pady=5)
-        self.mot_de_passe = ttk.Entry(main_frame, width=40, show="*")
-        self.mot_de_passe.grid(row=3, column=1, sticky=(tk.W, tk.E), pady=5)
+        ctk.CTkLabel(frame_gauche, text="Mot de passe:").pack(pady=5)
+        self.mot_de_passe = ctk.CTkEntry(frame_gauche, width=300, show="*")
+        self.mot_de_passe.pack(pady=5)
         self.mot_de_passe.insert(0, EMAIL_CONFIG['mot_de_passe'])
         
         # Paramètres de surveillance
-        ttk.Label(main_frame, text="Paramètres de Surveillance", font=('Helvetica', 12, 'bold')).grid(row=4, column=0, columnspan=2, pady=10)
+        ctk.CTkLabel(frame_gauche, text="Paramètres de Surveillance", font=("Helvetica", 16, "bold")).pack(pady=10)
         
-        ttk.Label(main_frame, text="Seuil de variation (%):").grid(row=5, column=0, sticky=tk.W, pady=5)
-        self.seuil_variation = ttk.Entry(main_frame, width=10)
-        self.seuil_variation.grid(row=5, column=1, sticky=tk.W, pady=5)
+        ctk.CTkLabel(frame_gauche, text="Seuil de variation (%):").pack(pady=5)
+        self.seuil_variation = ctk.CTkEntry(frame_gauche, width=100)
+        self.seuil_variation.pack(pady=5)
         self.seuil_variation.insert(0, str(SEUIL_VARIATION))
         
-        ttk.Label(main_frame, text="Intervalle (minutes):").grid(row=6, column=0, sticky=tk.W, pady=5)
-        self.intervalle = ttk.Entry(main_frame, width=10)
-        self.intervalle.grid(row=6, column=1, sticky=tk.W, pady=5)
+        ctk.CTkLabel(frame_gauche, text="Intervalle (secondes):").pack(pady=5)
+        self.intervalle = ctk.CTkEntry(frame_gauche, width=100)
+        self.intervalle.pack(pady=5)
         self.intervalle.insert(0, str(INTERVALLE_VERIFICATION))
         
         # Boutons de contrôle
-        self.bouton_demarrer = ttk.Button(main_frame, text="Démarrer la surveillance", command=self.demarrer_surveillance)
-        self.bouton_demarrer.grid(row=7, column=0, columnspan=2, pady=10)
+        self.bouton_demarrer = ctk.CTkButton(frame_gauche, text="Démarrer la surveillance", command=self.demarrer_surveillance)
+        self.bouton_demarrer.pack(pady=10)
         
         # Zone de logs
-        ttk.Label(main_frame, text="Logs:", font=('Helvetica', 12, 'bold')).grid(row=8, column=0, columnspan=2, pady=5)
-        self.zone_logs = scrolledtext.ScrolledText(main_frame, width=70, height=10)
-        self.zone_logs.grid(row=9, column=0, columnspan=2, pady=5)
+        ctk.CTkLabel(frame_gauche, text="Logs:", font=("Helvetica", 16, "bold")).pack(pady=5)
+        self.zone_logs = scrolledtext.ScrolledText(frame_gauche, width=50, height=10)
+        self.zone_logs.pack(pady=5)
         
         # Status bar
         self.status_var = tk.StringVar()
         self.status_var.set("Prêt")
-        status_bar = ttk.Label(main_frame, textvariable=self.status_var, relief=tk.SUNKEN, anchor=tk.W)
-        status_bar.grid(row=10, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=5)
+        status_bar = ctk.CTkLabel(frame_gauche, textvariable=self.status_var)
+        status_bar.pack(pady=5)
+        
+        # Frame droite pour le graphique
+        frame_droite = ctk.CTkFrame(main_frame)
+        frame_droite.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=5)
+        
+        # Graphique
+        self.graphique = ctk.CTkCanvas(frame_droite, width=500, height=400, bg='#2b2b2b')
+        self.graphique.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+        
+        # Chargement de l'historique
+        self.charger_historique()
+    
+    def dessiner_graphique(self):
+        """Dessine le graphique des prix"""
+        self.graphique.delete("all")
+        
+        if len(self.historique_prix) < 2:
+            return
+            
+        # Dimensions du canvas
+        width = self.graphique.winfo_width()
+        height = self.graphique.winfo_height()
+        
+        # Marges
+        margin = 40
+        graph_width = width - 2 * margin
+        graph_height = height - 2 * margin
+        
+        # Échelles
+        min_prix = min(self.historique_prix)
+        max_prix = max(self.historique_prix)
+        prix_range = max_prix - min_prix
+        
+        # Dessiner les axes
+        self.graphique.create_line(margin, height - margin, width - margin, height - margin, fill='white')  # Axe X
+        self.graphique.create_line(margin, margin, margin, height - margin, fill='white')  # Axe Y
+        
+        # Dessiner les points et lignes
+        points = []
+        for i, (prix, temps) in enumerate(zip(self.historique_prix, self.historique_temps)):
+            x = margin + (i * graph_width) / (len(self.historique_prix) - 1)
+            y = height - margin - ((prix - min_prix) * graph_height) / prix_range
+            points.append((x, y))
+            
+            # Dessiner le point
+            self.graphique.create_oval(x-2, y-2, x+2, y+2, fill='#1f538d')
+            
+            # Ajouter le label de temps tous les 30 points pour éviter la surcharge
+            if i % 30 == 0:
+                self.graphique.create_text(x, height - margin + 10, text=temps, fill='white', angle=45)
+        
+        # Dessiner les lignes entre les points
+        for i in range(len(points) - 1):
+            self.graphique.create_line(points[i][0], points[i][1], points[i+1][0], points[i+1][1], fill='#1f538d', width=2)
+        
+        # Ajouter le titre
+        self.graphique.create_text(width/2, margin/2, 
+                                 text=f"Évolution du Prix Bitcoin (Mise à jour toutes les {INTERVALLE_VERIFICATION} secondes)", 
+                                 fill='white', 
+                                 font=('Helvetica', 14, 'bold'))
+        
+        # Ajouter les valeurs min et max
+        self.graphique.create_text(margin - 5, height - margin, text=f"{min_prix:.0f}€", fill='white', anchor='e')
+        self.graphique.create_text(margin - 5, margin, text=f"{max_prix:.0f}€", fill='white', anchor='e')
+        
+        # Ajouter le prix actuel
+        dernier_prix = self.historique_prix[-1]
+        self.graphique.create_text(width - margin + 5, margin, 
+                                 text=f"Prix actuel: {dernier_prix:.2f}€", 
+                                 fill='white', 
+                                 anchor='w',
+                                 font=('Helvetica', 12, 'bold'))
+    
+    def charger_historique(self):
+        """Charge l'historique des prix depuis le fichier JSON"""
+        try:
+            if os.path.exists(FICHIER_PRIX):
+                with open(FICHIER_PRIX, 'r') as f:
+                    data = json.load(f)
+                    self.historique_prix = data.get('prix', [])
+                    self.historique_temps = data.get('temps', [])
+                    if self.historique_prix:
+                        self.log(f"Dernier prix enregistré: {self.historique_prix[-1]:.2f} EUR")
+                        self.dessiner_graphique()
+        except Exception as e:
+            self.log(f"Erreur lors du chargement de l'historique: {e}")
+    
+    def sauvegarder_historique(self):
+        """Sauvegarde l'historique des prix dans le fichier JSON"""
+        with open(FICHIER_PRIX, 'w') as f:
+            json.dump({
+                'prix': self.historique_prix,
+                'temps': self.historique_temps
+            }, f)
     
     def log(self, message):
         """Ajoute un message dans la zone de logs"""
@@ -102,7 +203,6 @@ class BitcoinAlerteGUI:
     def demarrer_surveillance(self):
         """Démarre ou arrête la surveillance"""
         if not self.surveillance_active:
-            # Mise à jour de la configuration
             try:
                 EMAIL_CONFIG['expediteur'] = self.email_expediteur.get()
                 EMAIL_CONFIG['destinataire'] = self.email_destinataire.get()
@@ -114,7 +214,6 @@ class BitcoinAlerteGUI:
                 messagebox.showerror("Erreur", "Veuillez entrer des valeurs numériques valides pour le seuil et l'intervalle")
                 return
             
-            # Démarrage de la surveillance dans un thread séparé
             self.surveillance_active = True
             self.thread_surveillance = threading.Thread(target=self.surveillance_continue)
             self.thread_surveillance.daemon = True
@@ -124,7 +223,6 @@ class BitcoinAlerteGUI:
             self.status_var.set("Surveillance active")
             self.log("Surveillance démarrée")
         else:
-            # Arrêt de la surveillance
             self.surveillance_active = False
             self.bouton_demarrer.configure(text="Démarrer la surveillance")
             self.status_var.set("Surveillance arrêtée")
@@ -134,7 +232,11 @@ class BitcoinAlerteGUI:
         """Fonction de surveillance continue"""
         while self.surveillance_active:
             self.verifier_prix()
-            time.sleep(INTERVALLE_VERIFICATION * 60)
+            # Attendre le nombre de secondes spécifié
+            for _ in range(INTERVALLE_VERIFICATION):
+                if not self.surveillance_active:
+                    break
+                time.sleep(1)
     
     def verifier_prix(self):
         """Vérifie le prix et envoie une alerte si nécessaire"""
@@ -145,21 +247,31 @@ class BitcoinAlerteGUI:
             self.log("Erreur lors de la récupération du prix")
             return
 
-        ancien_prix = charger_dernier_prix()
+        # Ajout du nouveau prix à l'historique
+        self.historique_prix.append(nouveau_prix)
+        self.historique_temps.append(datetime.now().strftime("%H:%M:%S"))
         
-        if ancien_prix is None:
+        # Limitation de l'historique aux 360 derniers points (1 heure de données à 10 secondes d'intervalle)
+        if len(self.historique_prix) > 360:
+            self.historique_prix = self.historique_prix[-360:]
+            self.historique_temps = self.historique_temps[-360:]
+        
+        # Sauvegarde de l'historique
+        self.sauvegarder_historique()
+        
+        # Mise à jour du graphique
+        self.dessiner_graphique()
+        
+        if len(self.historique_prix) > 1:
+            ancien_prix = self.historique_prix[-2]
+            variation = calculer_variation(ancien_prix, nouveau_prix)
+            self.log(f"Prix actuel: {nouveau_prix:.2f} EUR - Variation: {variation:.2f}%")
+
+            if abs(variation) >= SEUIL_VARIATION:
+                self.log(f"Alerte! Variation de {variation:.2f}% détectée")
+                envoyer_email(ancien_prix, nouveau_prix, variation)
+        else:
             self.log(f"Première vérification - Prix actuel: {nouveau_prix:.2f} EUR")
-            sauvegarder_prix(nouveau_prix)
-            return
-
-        variation = calculer_variation(ancien_prix, nouveau_prix)
-        self.log(f"Variation: {variation:.2f}%")
-
-        if abs(variation) >= SEUIL_VARIATION:
-            self.log(f"Alerte! Variation de {variation:.2f}% détectée")
-            envoyer_email(ancien_prix, nouveau_prix, variation)
-        
-        sauvegarder_prix(nouveau_prix)
 
 def obtenir_prix_bitcoin():
     """Récupère le prix actuel du Bitcoin via l'API CoinGecko"""
@@ -172,22 +284,6 @@ def obtenir_prix_bitcoin():
     except Exception as e:
         print(f"Erreur lors de la récupération du prix: {e}")
         return None
-
-def sauvegarder_prix(prix):
-    """Sauvegarde le prix dans un fichier JSON"""
-    with open(FICHIER_PRIX, 'w') as f:
-        json.dump({'prix': prix}, f)
-
-def charger_dernier_prix():
-    """Charge le dernier prix sauvegardé"""
-    try:
-        if os.path.exists(FICHIER_PRIX):
-            with open(FICHIER_PRIX, 'r') as f:
-                data = json.load(f)
-                return data['prix']
-    except Exception as e:
-        print(f"Erreur lors de la lecture du fichier de prix: {e}")
-    return None
 
 def calculer_variation(ancien_prix, nouveau_prix):
     """Calcule le pourcentage de variation"""
@@ -222,7 +318,7 @@ def envoyer_email(ancien_prix, nouveau_prix, variation):
         print(f"Erreur lors de l'envoi de l'email: {e}")
 
 def main():
-    root = tk.Tk()
+    root = ctk.CTk()
     app = BitcoinAlerteGUI(root)
     root.mainloop()
 
