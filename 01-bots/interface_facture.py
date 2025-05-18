@@ -36,6 +36,7 @@ class InterfaceFacture(ctk.CTk):
         
         # Champs client
         self.nom_client = self.creer_champ(frame_client, "Nom du client")
+        self.prenom_client = self.creer_champ(frame_client, "Prénom du client")
         self.adresse_client = self.creer_champ(frame_client, "Adresse")
         
         # Frame pour les services
@@ -101,10 +102,17 @@ class InterfaceFacture(ctk.CTk):
 
     def generer_facture(self):
         try:
+            # Vérification des champs obligatoires
+            nom = self.nom_client.get().strip()
+            prenom = self.prenom_client.get().strip()
+            if not nom or not prenom:
+                messagebox.showerror("Erreur", "Le nom et le prénom du client sont obligatoires")
+                return
+
             # Récupération des données
             data = {
                 "client": {
-                    "nom": self.nom_client.get(),
+                    "nom": f"{nom} {prenom}",
                     "adresse": self.adresse_client.get()
                 },
                 "date": self.get_date_actuelle(),
@@ -122,8 +130,8 @@ class InterfaceFacture(ctk.CTk):
                         "prix_unitaire": float(prix.get())
                     })
             
-            # Génération de la facture
-            chemin_pdf = generer_facture_pdf(data)
+            # Génération de la facture avec le nom dans le nom du fichier
+            chemin_pdf = generer_facture_pdf(data, nom_fichier=f"facture_{nom.lower()}.pdf")
             messagebox.showinfo("Succès", f"Facture générée : {chemin_pdf}")
             
             # Actualisation de l'historique

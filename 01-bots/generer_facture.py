@@ -11,11 +11,14 @@ def charger_donnees(json_path):
     with open(json_path, encoding='utf-8') as f:
         return json.load(f)
 
-def generer_facture_pdf(data, logo_path=None, dossier='factures'):
+def generer_facture_pdf(data, logo_path=None, dossier='factures', nom_fichier=None):
     """Génère un PDF de facture à partir des données fournies."""
     if not os.path.exists(dossier):
         os.makedirs(dossier)
-    nom_fichier = f"facture_{data['numero']}.pdf"
+    
+    if nom_fichier is None:
+        nom_fichier = f"facture_{data['numero']}.pdf"
+    
     chemin_pdf = os.path.join(dossier, nom_fichier)
 
     doc = SimpleDocTemplate(chemin_pdf, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=18)
