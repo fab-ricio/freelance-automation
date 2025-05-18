@@ -1,0 +1,21 @@
+{
+    "client": {
+        "nom": "Jean Dupont",
+        "adresse": "123 rue de Paris, 75001 Paris"
+    },
+    "date": "2024-05-18",
+    "numero": "001",
+    "services": [
+        {
+            "description": "Développement web",
+            "quantite": 10,
+            "prix_unitaire": 50
+        },
+        {
+            "description": "Maintenance",
+            "quantite": 2,
+            "prix_unitaire": 80
+        }
+    ],
+    "tva": 20
+} 
