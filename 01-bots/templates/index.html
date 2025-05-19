@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveillance Bitcoin</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            flex: 1;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .control-group h3 {
+            margin-top: 0;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Surveillance du Prix Bitcoin</h1>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <h3>Configuration Email</h3>
+                <input type="email" id="email_expediteur" placeholder="Email expéditeur">
+                <input type="email" id="email_destinataire" placeholder="Email destinataire">
+                <input type="password" id="mot_de_passe" placeholder="Mot de passe application">
+            </div>
+
+            <div class="control-group">
+                <h3>Paramètres de Surveillance</h3>
+                <input type="number" id="seuil_variation" placeholder="Seuil de variation (%)" value="5">
+                <input type="number" id="intervalle" placeholder="Intervalle (secondes)" value="10">
+                <button id="toggle_surveillance">Démarrer la surveillance</button>
+            </div>
+        </div>
+
+        <div id="status" class="status inactive">
+            Surveillance inactive
+        </div>
+
+        <div class="chart-container">
+            <canvas id="priceChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let chart;
+        let surveillanceActive = false;
+
+        // Initialisation du graphique
+        function initChart() {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Prix Bitcoin (EUR)',
+                        data: [],
+                        borderColor: '#007bff',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Mise à jour du graphique
+        function updateChart(data) {
+            chart.data.labels = data.historique.temps;
+            chart.data.datasets[0].data = data.historique.prix;
+            chart.update();
+        }
+
+        // Mise à jour du statut
+        function updateStatus(active) {
+            const status = document.getElementById('status');
+            status.textContent = active ? 'Surveillance active' : 'Surveillance inactive';
+            status.className = `status ${active ? 'active' : 'inactive'}`;
+        }
+
+        // Fonction pour démarrer/arrêter la surveillance
+        async function toggleSurveillance() {
+            const button = document.getElementById('toggle_surveillance');
+            const endpoint = surveillanceActive ? '/api/arreter' : '/api/demarrer';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    surveillanceActive = !surveillanceActive;
+                    button.textContent = surveillanceActive ? 'Arrêter la surveillance' : 'Démarrer la surveillance';
+                    updateStatus(surveillanceActive);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+
+        // Mise à jour périodique des données
+        async function updateData() {
+            try {
+                const response = await fetch('/api/prix');
+                const data = await response.json();
+                updateChart(data);
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour des données:', error);
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            document.getElementById('toggle_surveillance').addEventListener('click', toggleSurveillance);
+            setInterval(updateData, 1000); // Mise à jour toutes les secondes
+        });
+    </script>
+</body>
+
+</html>

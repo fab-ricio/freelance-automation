@@ -72,7 +72,7 @@ class BitcoinAlerteGUI:
         self.mot_de_passe = ctk.CTkEntry(frame_gauche, width=300, show="*")
         self.mot_de_passe.pack(pady=5)
         self.mot_de_passe.insert(0, EMAIL_CONFIG['mot_de_passe'])
-        
+
         # Paramètres de surveillance
         ctk.CTkLabel(frame_gauche, text="Paramètres de Surveillance", font=("Helvetica", 16, "bold")).pack(pady=10)
         
