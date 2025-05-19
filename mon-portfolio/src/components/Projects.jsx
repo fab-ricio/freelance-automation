@@ -114,6 +114,12 @@ function ProjectsCarousel3D({ active, setActive }) {
   const radius = 3.5;
   const angleStep = (2 * Math.PI) / projects.length;
 
+  // Correction du bug d'écrasement initial :
+  // On ne rend le carrousel que si le composant est monté côté client
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return <div style={{ height: 320 }} />;
+
   return (
     <>
       <Canvas camera={{ position: [0, 0, 8], fov: 50 }} shadows>
