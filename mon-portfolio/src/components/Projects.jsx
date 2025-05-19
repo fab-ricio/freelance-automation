@@ -156,24 +156,32 @@ const Projects = () => {
         <ProjectsCarousel3D active={active} setActive={setActive} />
         {/* Boutons de navigation en overlay, toujours visibles */}
         <div className="w-full flex justify-center items-end absolute bottom-8 left-0 z-30 pointer-events-none">
-          <div className="flex gap-8 pointer-events-auto">
+          <div className="flex gap-6 pointer-events-auto">
             <button
               onClick={() => setActive((prev) => (prev - 1 + projects.length) % projects.length)}
-              className="bg-gradient-to-br from-blue-700/80 via-indigo-600/80 to-fuchsia-500/80 border border-blue-400/40 shadow-[0_0_24px_#6366f1cc] hover:from-fuchsia-500/90 hover:to-blue-700/90 hover:scale-110 text-blue-100 rounded-full w-16 h-16 flex items-center justify-center text-4xl transition-all duration-300 futuristic-glow"
+              className="relative group rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 focus:outline-none border-none bg-transparent"
               aria-label="Projet précédent"
               tabIndex={0}
-              style={{ outline: 'none' }}
             >
-              <span className="drop-shadow-[0_0_8px_#60a5fa]">&#8592;</span>
+              {/* Effet 3D harmonisé avec RoundedBox */}
+              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-700 via-indigo-600 to-fuchsia-500 shadow-[0_0_16px_#6366f1cc] group-hover:from-fuchsia-500 group-hover:to-blue-700 group-hover:scale-105 transition-all duration-300" style={{ filter: 'blur(4px)', opacity: 0.7 }}></span>
+              <span className="absolute inset-1 rounded-full bg-gradient-to-br from-blue-600 via-indigo-500 to-fuchsia-400 border border-blue-300/40 shadow-[0_0_8px_#6366f1bb] group-hover:from-fuchsia-400 group-hover:to-blue-600 transition-all duration-300"></span>
+              <span className="relative z-10 text-blue-100 text-2xl drop-shadow-[0_0_8px_#60a5fa] select-none">
+                &#8592;
+              </span>
             </button>
             <button
               onClick={() => setActive((prev) => (prev + 1) % projects.length)}
-              className="bg-gradient-to-br from-blue-700/80 via-indigo-600/80 to-fuchsia-500/80 border border-blue-400/40 shadow-[0_0_24px_#6366f1cc] hover:from-fuchsia-500/90 hover:to-blue-700/90 hover:scale-110 text-blue-100 rounded-full w-16 h-16 flex items-center justify-center text-4xl transition-all duration-300 futuristic-glow"
+              className="relative group rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 focus:outline-none border-none bg-transparent"
               aria-label="Projet suivant"
               tabIndex={0}
-              style={{ outline: 'none' }}
             >
-              <span className="drop-shadow-[0_0_8px_#60a5fa]">&#8594;</span>
+              {/* Effet 3D harmonisé avec RoundedBox */}
+              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-700 via-indigo-600 to-fuchsia-500 shadow-[0_0_16px_#6366f1cc] group-hover:from-fuchsia-500 group-hover:to-blue-700 group-hover:scale-105 transition-all duration-300" style={{ filter: 'blur(4px)', opacity: 0.7 }}></span>
+              <span className="absolute inset-1 rounded-full bg-gradient-to-br from-blue-600 via-indigo-500 to-fuchsia-400 border border-blue-300/40 shadow-[0_0_8px_#6366f1bb] group-hover:from-fuchsia-400 group-hover:to-blue-600 transition-all duration-300"></span>
+              <span className="relative z-10 text-blue-100 text-2xl drop-shadow-[0_0_8px_#60a5fa] select-none">
+                &#8594;
+              </span>
             </button>
           </div>
         </div>

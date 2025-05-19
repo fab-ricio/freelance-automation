@@ -115,3 +115,23 @@ button, .btn {
   min-width: 44px;
   min-height: 44px;
 }
+
+@keyframes spin { 
+  to { 
+    transform: rotate(360deg); 
+  } 
+}
+
+@keyframes spin-reverse { 
+  to { 
+    transform: rotate(-360deg); 
+  } 
+}
+
+.animate-spin-slow { 
+  animation: spin 8s linear infinite; 
+}
+
+.animate-spin-reverse-slower { 
+  animation: spin-reverse 16s linear infinite; 
+}
