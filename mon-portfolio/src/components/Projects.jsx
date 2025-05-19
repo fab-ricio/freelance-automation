@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Html } from '@react-three/drei';
+import { OrbitControls, Html, RoundedBox } from '@react-three/drei';
 
 const projects = [
   {
@@ -28,33 +28,38 @@ function ProjectCard3D({ project, position, rotation, isActive, isSide, onClick 
     }
   });
   return (
-    <mesh
-      ref={meshRef}
-      position={position}
-      scale={isActive ? [1.5, 1.5, 1.5] : [1.1, 1.1, 1.1]}
-      onClick={isActive ? undefined : onClick}
-      castShadow
-      receiveShadow
-      style={{ cursor: isActive ? 'default' : 'pointer' }}
-    >
-      {/* Carte futuriste : bords lumineux, effet glass, coins arrondis */}
-      <boxGeometry args={[3, 1.7, 0.28]} />
-      <meshStandardMaterial color={isActive ? '#6366f1' : '#3b82f6'} transparent opacity={isActive ? 0.98 : 0.5} metalness={0.7} roughness={0.18} />
+    <group position={position}>
+      <RoundedBox
+        ref={meshRef}
+        args={[3.7, 2.1, 0.22]} // width, height, depth (agrandi)
+        radius={0.38}
+        smoothness={8}
+        scale={isActive ? [1.7, 1.7, 1.7] : [1.25, 1.25, 1.25]}
+        onClick={isActive ? undefined : onClick}
+        castShadow
+        receiveShadow
+      >
+        <meshStandardMaterial color={isActive ? '#6366f1' : '#3b82f6'} transparent opacity={isActive ? 0.98 : 0.5} metalness={0.7} roughness={0.18} />
+      </RoundedBox>
       {/* Effet néon autour */}
       {isActive && (
-        <mesh position={[0, 0, 0.16]}>
-          <boxGeometry args={[3.08, 1.78, 0.01]} />
+        <RoundedBox
+          args={[3.8, 2.18, 0.01]}
+          radius={0.42}
+          smoothness={8}
+          position={[0, 0, 0.13]}
+        >
           <meshStandardMaterial emissive="#60a5fa" emissiveIntensity={0.7} color="white" transparent opacity={0.18} />
-        </mesh>
+        </RoundedBox>
       )}
       <Html center>
-        <div className={`w-64 p-4 flex flex-col items-center transition-all duration-300 rounded-2xl shadow-[0_0_32px_#6366f1aa] ${isActive ? '' : 'blur-[2px] grayscale opacity-60 pointer-events-none'}`}
+        <div className={`w-80 p-6 flex flex-col items-center transition-all duration-300 rounded-2xl shadow-[0_0_32px_#6366f1aa] ${isActive ? '' : 'blur-[2px] grayscale opacity-60 pointer-events-none'}`}
           style={{ pointerEvents: isActive ? 'auto' : 'none', boxShadow: isActive ? '0 0 32px #6366f1cc, 0 0 8px #60a5fa99' : undefined, background: 'linear-gradient(135deg, rgba(30,58,138,0.85) 0%, rgba(67,56,202,0.85) 50%, rgba(139,92,246,0.85) 100%)', borderRadius: '1rem' }}>
-          <h3 className="text-base md:text-xl font-bold mb-2 text-blue-200 tracking-wide uppercase drop-shadow text-center futuristic-font">{project.title}</h3>
-          <p className="text-gray-200 mb-4 text-sm md:text-base opacity-90 text-center">{project.description}</p>
+          <h3 className="text-lg md:text-2xl font-bold mb-3 text-blue-200 tracking-wide uppercase drop-shadow text-center futuristic-font">{project.title}</h3>
+          <p className="text-gray-200 mb-5 text-base md:text-lg opacity-90 text-center">{project.description}</p>
           <a
             href={project.github}
-            className="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg hover:from-indigo-600 hover:to-blue-500 transition-all duration-300 text-sm"
+            className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg hover:from-indigo-600 hover:to-blue-500 transition-all duration-300 text-base"
             target="_blank"
             rel="noopener noreferrer"
             style={{ pointerEvents: isActive ? 'auto' : 'none', textShadow: '0 0 8px #60a5fa' }}
@@ -63,7 +68,7 @@ function ProjectCard3D({ project, position, rotation, isActive, isSide, onClick 
           </a>
         </div>
       </Html>
-    </mesh>
+    </group>
   );
 }
 
