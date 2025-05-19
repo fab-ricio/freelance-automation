@@ -72,8 +72,45 @@ function ProjectCard3D({ project, position, rotation, isActive, isSide, onClick 
   );
 }
 
-function ProjectsCarousel3D() {
-  const [active, setActive] = useState(1);
+// Lumières dynamiques futuristes autour des projets
+function FuturisticLights() {
+  // Crée 5 refs pour 5 lumières
+  const lightRefs = [useRef(), useRef(), useRef(), useRef(), useRef()];
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    lightRefs.forEach((ref, i) => {
+      if (ref.current) {
+        // Mouvement orbital lent, hauteur et rayon variables, effet "futuriste"
+        const baseRadius = 5.5 + Math.sin(t * 0.13 + i) * 0.7;
+        const angle = t * (0.12 + i * 0.04) + i * (Math.PI * 2 / lightRefs.length);
+        const y = Math.sin(t * 0.18 + i) * 1.2 + 0.2 * Math.cos(angle * 2);
+        ref.current.position.set(
+          Math.cos(angle) * baseRadius,
+          y,
+          Math.sin(angle) * baseRadius
+        );
+      }
+    });
+  });
+  // Couleurs néon variées pour effet "futuriste"
+  const colors = ["#60a5fa", "#f472b6", "#facc15", "#a5b4fc", "#34d399"];
+  return (
+    <>
+      {lightRefs.map((ref, i) => (
+        <pointLight
+          key={i}
+          ref={ref}
+          intensity={0.7 + 0.2 * Math.sin(i)}
+          distance={7.5}
+          color={colors[i % colors.length]}
+          decay={2}
+        />
+      ))}
+    </>
+  );
+}
+
+function ProjectsCarousel3D({ active, setActive }) {
   const radius = 3.5;
   const angleStep = (2 * Math.PI) / projects.length;
 
@@ -82,6 +119,8 @@ function ProjectsCarousel3D() {
       <Canvas camera={{ position: [0, 0, 8], fov: 50 }} shadows>
         <ambientLight intensity={0.7} />
         <directionalLight position={[5, 5, 5]} intensity={0.7} />
+        {/* Lumières dynamiques futuristes autour des projets */}
+        <FuturisticLights />
         {projects.map((project, idx) => {
           const offset = idx - active;
           const angle = offset * angleStep;
@@ -103,32 +142,41 @@ function ProjectsCarousel3D() {
         })}
         <OrbitControls enablePan={false} enableZoom={false} enableRotate={false} />
       </Canvas>
-      <div className="flex justify-center gap-8 mt-4">
-        <button
-          onClick={() => setActive((prev) => (prev - 1 + projects.length) % projects.length)}
-          className="bg-white/10 hover:bg-white/20 text-blue-200 rounded-full w-12 h-12 flex items-center justify-center shadow-lg text-3xl transition-all duration-200"
-          aria-label="Projet précédent"
-        >
-          &#8592;
-        </button>
-        <button
-          onClick={() => setActive((prev) => (prev + 1) % projects.length)}
-          className="bg-white/10 hover:bg-white/20 text-blue-200 rounded-full w-12 h-12 flex items-center justify-center shadow-lg text-3xl transition-all duration-200"
-          aria-label="Projet suivant"
-        >
-          &#8594;
-        </button>
-      </div>
     </>
   );
 }
 
 const Projects = () => {
+  const [active, setActive] = useState(1);
+
   return (
-    <section id="projects" className="w-full py-8 sm:py-12 md:py-20 px-2 sm:px-4 md:px-8 text-white flex flex-col items-center">
+    <section id="projects" className="w-screen min-h-screen py-8 sm:py-12 md:py-20 px-0 text-white flex flex-col items-center justify-center overflow-x-hidden max-w-full">
       <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-8 text-center">Mes Projets (Carrousel 3D)</h2>
-      <div className="w-full max-w-5xl h-[400px] md:h-[500px]">
-        <ProjectsCarousel3D />
+      <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center">
+        <ProjectsCarousel3D active={active} setActive={setActive} />
+        {/* Boutons de navigation en overlay, toujours visibles */}
+        <div className="w-full flex justify-center items-end absolute bottom-8 left-0 z-30 pointer-events-none">
+          <div className="flex gap-8 pointer-events-auto">
+            <button
+              onClick={() => setActive((prev) => (prev - 1 + projects.length) % projects.length)}
+              className="bg-gradient-to-br from-blue-700/80 via-indigo-600/80 to-fuchsia-500/80 border border-blue-400/40 shadow-[0_0_24px_#6366f1cc] hover:from-fuchsia-500/90 hover:to-blue-700/90 hover:scale-110 text-blue-100 rounded-full w-16 h-16 flex items-center justify-center text-4xl transition-all duration-300 futuristic-glow"
+              aria-label="Projet précédent"
+              tabIndex={0}
+              style={{ outline: 'none' }}
+            >
+              <span className="drop-shadow-[0_0_8px_#60a5fa]">&#8592;</span>
+            </button>
+            <button
+              onClick={() => setActive((prev) => (prev + 1) % projects.length)}
+              className="bg-gradient-to-br from-blue-700/80 via-indigo-600/80 to-fuchsia-500/80 border border-blue-400/40 shadow-[0_0_24px_#6366f1cc] hover:from-fuchsia-500/90 hover:to-blue-700/90 hover:scale-110 text-blue-100 rounded-full w-16 h-16 flex items-center justify-center text-4xl transition-all duration-300 futuristic-glow"
+              aria-label="Projet suivant"
+              tabIndex={0}
+              style={{ outline: 'none' }}
+            >
+              <span className="drop-shadow-[0_0_8px_#60a5fa]">&#8594;</span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
