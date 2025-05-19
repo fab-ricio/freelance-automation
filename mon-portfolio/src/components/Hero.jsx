@@ -5,11 +5,11 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative flex flex-col justify-center items-center text-center min-h-screen px-4 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-gray-900 dark:to-gray-800 text-white"
+      className="w-full relative flex flex-col justify-center items-center text-center min-h-[60vh] sm:min-h-[80vh] md:min-h-screen px-2 sm:px-4 md:px-8 py-8 sm:py-12 md:py-20 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-gray-900 dark:to-gray-800 text-white"
     >
       {/* Texte principal animé */}
       <motion.h1
-        className="text-5xl md:text-6xl font-extrabold mb-4"
+        className="text-base sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-4"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
@@ -19,7 +19,7 @@ const Hero = () => {
 
       {/* Sous-titre */}
       <motion.p
-        className="text-xl md:text-2xl max-w-xl mb-8"
+        className="text-xs sm:text-base md:text-lg lg:text-xl max-w-xl mb-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.8 }}
         transition={{ delay: 1, duration: 1 }}
@@ -30,7 +30,7 @@ const Hero = () => {
       {/* Bouton d’action */}
       <motion.a
         href="#projects"
-        className="inline-block px-8 py-3 rounded-full bg-white text-indigo-600 font-semibold shadow-lg hover:bg-indigo-50 dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-600 transition"
+        className="inline-block px-4 sm:px-8 py-2 sm:py-3 rounded-full bg-white text-indigo-600 font-semibold shadow-lg hover:bg-indigo-50 dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-600 transition text-xs sm:text-lg"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 1.8, duration: 0.5 }}

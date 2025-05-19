@@ -2,10 +2,10 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6 mt-16">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm">
-        <p className="mb-2 md:mb-0">&copy; {new Date().getFullYear()} Ton Nom. Tous droits réservés.</p>
-        <div className="space-x-4">
+    <footer className="w-full bg-gray-800 text-white py-6 mt-0">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm gap-2 sm:gap-0">
+        <p className="mb-2 md:mb-0 text-center">&copy; {new Date().getFullYear()} Ton Nom. Tous droits réservés.</p>
+        <div className="space-x-2 sm:space-x-4 flex flex-row justify-center md:justify-end">
           <a
             href="https://github.com/tonprofil"
             target="_blank"

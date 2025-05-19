@@ -18,18 +18,18 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="py-16 px-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-      <h2 className="text-3xl font-bold mb-10 text-center">Mes Services</h2>
-      <div className="grid md:grid-cols-3 gap-8">
+    <section id="services" className="w-full py-8 sm:py-12 md:py-20 px-2 sm:px-4 md:px-8 bg-transparent text-white">
+      <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-10 text-center">Mes Services</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
         {services.map((service, index) => (
           <motion.div
             key={index}
-            className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-xl transition duration-300"
+            className="bg-white/10 p-4 sm:p-6 rounded-lg shadow hover:shadow-xl border border-white/10 transition duration-300"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           >
-            <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-            <p className="text-gray-700 dark:text-gray-300">{service.description}</p>
+            <h3 className="text-xs sm:text-base md:text-lg font-semibold mb-2">{service.title}</h3>
+            <p className="text-gray-200 text-xs sm:text-base">{service.description}</p>
           </motion.div>
         ))}
       </div>

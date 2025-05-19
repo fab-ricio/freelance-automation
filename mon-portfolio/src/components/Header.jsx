@@ -9,23 +9,22 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-70 backdrop-blur-lg shadow-md">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-white">
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-3 flex flex-col sm:flex-row justify-between items-center text-white gap-2 sm:gap-0 w-full">
         {/* Logo */}
         <motion.h1
-          className="text-2xl font-bold"
+          className="text-base sm:text-xl md:text-2xl font-bold mb-2 sm:mb-0"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           MonPortfolio
         </motion.h1>
-
         {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-8 text-sm font-medium">
+        <nav className="hidden md:flex gap-4 sm:gap-8 text-xs sm:text-sm font-medium">
           {links.map((link, i) => (
             <motion.a
               key={i}
-              href={`#${link.toLowerCase()}`}
+              href={`#${link.toLowerCase().replace(/ /g, '-')}`}
               whileHover={{ scale: 1.1 }}
               className="hover:text-indigo-400 transition-colors duration-200"
             >
@@ -33,27 +32,25 @@ export default function Header() {
             </motion.a>
           ))}
         </nav>
-
         {/* Burger Icon */}
         <div className="md:hidden text-xl cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <FaTimes /> : <FaBars />}
         </div>
       </div>
-
       {/* Mobile Menu */}
       {menuOpen && (
         <motion.div
           initial={{ y: -100 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.3 }}
-          className="md:hidden bg-black bg-opacity-95 text-white flex flex-col items-center py-4 space-y-4"
+          className="md:hidden bg-black bg-opacity-95 text-white flex flex-col items-center py-4 space-y-2 text-base w-full"
         >
           {links.map((link, i) => (
             <a
               key={i}
-              href={`#${link.toLowerCase()}`}
+              href={`#${link.toLowerCase().replace(/ /g, '-')}`}
               onClick={() => setMenuOpen(false)}
-              className="text-lg font-medium hover:text-indigo-400"
+              className="font-medium hover:text-indigo-400"
             >
               {link}
             </a>
