@@ -97,7 +97,7 @@ function CoverflowWebProjects({ projects }) {
           const rotateY = offset * -35;
           const scale = offset === 0 ? 1.07 : 0.92;
           const zIndex = 10 - Math.abs(offset);
-          const blur = offset === 0 ? '' : 'blur-[0.5px] grayscale opacity-80';
+          const blur = offset === 0 ? '' : 'backdrop-blur-[6px] blur-[2px] grayscale opacity-70';
           const shadow = offset === 0 ? 'shadow-[0_4px_16px_#6366f1bb,0_0_8px_#facc1588]' : 'shadow-[0_1px_6px_#6366f188]';
           const border = offset === 0 ? 'border-2 border-blue-400/40' : 'border border-indigo-400/20';
           return (
