@@ -3,9 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
 const links = ['Accueil', 'À propos', 'Projets', 'Services', 'Contact'];
+const servicesList = [
+  'Automatisation de tâches',
+  'Développement de bots',
+  'Scraping web',
+  'Scripts Python/Node.js',
+  'Intégration API',
+];
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-70 backdrop-blur-lg shadow-md">
@@ -20,16 +28,55 @@ export default function Header() {
           MonPortfolio
         </motion.h1>
         {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-4 sm:gap-8 text-xs sm:text-sm font-medium">
+        <nav className="hidden md:flex gap-4 sm:gap-8 text-xs sm:text-sm font-medium items-center">
           {links.map((link, i) => (
-            <motion.a
-              key={i}
-              href={`#${link.toLowerCase().replace(/ /g, '-')}`}
-              whileHover={{ scale: 1.1 }}
-              className="hover:text-indigo-400 transition-colors duration-200"
-            >
-              {link}
-            </motion.a>
+            link === 'Services' ? (
+              <div key={i} className="relative group flex items-center"
+                onMouseEnter={() => setServicesOpen(true)}
+                onMouseLeave={() => setServicesOpen(false)}
+              >
+                <motion.a
+                  href={`#${link.toLowerCase().replace(/ /g, '-')}`}
+                  className="hover:text-indigo-400 transition-colors duration-200 flex items-center gap-1"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  {link}
+                  <motion.span
+                    className="ml-1 text-lg font-bold text-indigo-300 transition-transform duration-200"
+                    animate={{ rotate: servicesOpen ? 45 : 0 }}
+                  >
+                    +
+                  </motion.span>
+                </motion.a>
+                <AnimatePresence>
+                  {servicesOpen && (
+                    <motion.ul
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.22 }}
+                      className="absolute left-0 top-full mt-2 min-w-[220px] bg-[#181c2a] border border-indigo-700 rounded-xl shadow-xl py-2 z-50 flex flex-col items-center"
+                      style={{ minWidth: '220px' }}
+                    >
+                      {servicesList.map((srv, idx) => (
+                        <li key={idx} className="px-4 py-2 text-sm text-white hover:bg-indigo-700/60 cursor-pointer transition-colors duration-150 w-full text-center">
+                          {srv}
+                        </li>
+                      ))}
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <motion.a
+                key={i}
+                href={`#${link.toLowerCase().replace(/ /g, '-')}`}
+                whileHover={{ scale: 1.1 }}
+                className="hover:text-indigo-400 transition-colors duration-200"
+              >
+                {link}
+              </motion.a>
+            )
           ))}
         </nav>
         {/* Burger Icon animé */}
