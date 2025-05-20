@@ -1,22 +1,46 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Html, RoundedBox } from '@react-three/drei';
+import { OrbitControls, Html, RoundedBox, Sphere } from '@react-three/drei';
 
 const projects = [
   {
     title: 'Générateur de factures PDF',
     description: 'Crée automatiquement des factures en PDF à partir de données.',
     github: 'https://github.com/tonprofil/facture-pdf',
+    image: '/images/facture.jpg', // À placer dans le dossier images
   },
   {
     title: 'Bot Telegram auto-poster',
     description: 'Publie automatiquement du contenu sur Telegram via une API.',
     github: 'https://github.com/tonprofil/bot-telegram',
+    image: '/images/bot.jpg',
   },
   {
     title: 'Scraper de données web',
     description: 'Récupère des données d’un site en temps réel avec Node.js.',
     github: 'https://github.com/tonprofil/scraper-node',
+    image: '/images/scraper.jpg',
+  },
+];
+
+const webApps = [
+  {
+    title: 'Weather App',
+    description: "Application météo moderne avec API et design responsive.",
+    github: 'https://github.com/tonprofil/weather-app',
+    image: '/images/weather.jpg',
+  },
+  {
+    title: 'ToDo List',
+    description: "Gestionnaire de tâches intuitif, rapide et synchronisé.",
+    github: 'https://github.com/tonprofil/todo-list',
+    image: '/images/todo.jpg',
+  },
+  {
+    title: 'Dashboard Perso',
+    description: "Dashboard web personnalisable pour visualiser vos données.",
+    github: 'https://github.com/tonprofil/dashboard',
+    image: '/images/dashboard.jpg',
   },
 ];
 
@@ -55,6 +79,15 @@ function ProjectCard3D({ project, position, rotation, isActive, isSide, onClick 
       <Html center>
         <div className={`w-80 p-6 flex flex-col items-center transition-all duration-300 rounded-2xl shadow-[0_0_32px_#6366f1aa] ${isActive ? '' : 'blur-[2px] grayscale opacity-60 pointer-events-none'}`}
           style={{ pointerEvents: isActive ? 'auto' : 'none', boxShadow: isActive ? '0 0 32px #6366f1cc, 0 0 8px #60a5fa99' : undefined, background: 'linear-gradient(135deg, rgba(30,58,138,0.85) 0%, rgba(67,56,202,0.85) 50%, rgba(139,92,246,0.85) 100%)', borderRadius: '1rem' }}>
+          {/* Image illustrative du projet */}
+          {project.image && (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-24 h-24 object-cover rounded-xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10"
+              style={{ maxWidth: '96px', maxHeight: '96px' }}
+            />
+          )}
           <h3 className="text-lg md:text-2xl font-bold mb-3 text-blue-200 tracking-wide uppercase drop-shadow text-center futuristic-font">{project.title}</h3>
           <p className="text-gray-200 mb-5 text-base md:text-lg opacity-90 text-center">{project.description}</p>
           <a
@@ -152,11 +185,63 @@ function ProjectsCarousel3D({ active, setActive }) {
   );
 }
 
+function WebProjectsPlanet() {
+  // Satellites = webApps
+  const radius = 4.2; // plus grand
+  const satelliteSize = 0.7; // plus grand
+  const orbitSpeed = 0.4;
+  // Pour l'animation
+  const groupRef = useRef();
+  useFrame(({ clock }) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = clock.getElapsedTime() * orbitSpeed;
+    }
+  });
+  return (
+    <group ref={groupRef}>
+      {/* Planète centrale (plus grande) */}
+      <Sphere args={[2.1, 40, 40]} position={[0, 0, 0]}>
+        <meshStandardMaterial color="#6366f1" emissive="#60a5fa" emissiveIntensity={0.25} metalness={0.7} roughness={0.2} />
+      </Sphere>
+      {/* Satellites pour chaque projet web (plus grands et plus éloignés) */}
+      {webApps.map((app, i) => {
+        const angle = (i / webApps.length) * Math.PI * 2;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        return (
+          <group key={i} position={[x, 0, z]}>
+            <Sphere args={[satelliteSize, 32, 32]}>
+              <meshStandardMaterial color="#facc15" emissive="#f472b6" emissiveIntensity={0.18} />
+            </Sphere>
+            {/* Image ou icône du projet en Html (toujours visible) */}
+            <Html center distanceFactor={2.6} zIndexRange={[10, 0]}>
+              <div className="flex flex-col items-center">
+                <img
+                  src={app.image}
+                  alt={app.title}
+                  className="w-20 h-20 object-cover rounded-full shadow border-2 border-indigo-400 bg-white/10 mb-1"
+                  style={{ maxWidth: '80px', maxHeight: '80px' }}
+                />
+                <span className="text-sm text-blue-100 font-semibold bg-black/60 px-2 py-0.5 rounded mt-1 shadow-lg">
+                  {app.title}
+                </span>
+              </div>
+            </Html>
+          </group>
+        );
+      })}
+      {/* Légère lumière d'ambiance */}
+      <ambientLight intensity={0.5} />
+      <pointLight position={[0, 3, 3]} intensity={0.7} color="#60a5fa" />
+    </group>
+  );
+}
+
 const Projects = () => {
   const [active, setActive] = useState(1);
 
   return (
-    <section id="projects" className="w-screen min-h-screen py-8 sm:py-12 md:py-20 px-0 text-white flex flex-col items-center justify-center overflow-x-hidden max-w-full">
+    <section id="projects" className="w-screen min-h-screen py-8 sm:py-12 md:py-20 pb-32 lg:pb-44 px-0 text-white flex flex-col items-center justify-center overflow-x-hidden max-w-full">
       <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-8 text-center">Mes Projets (Carrousel 3D)</h2>
       <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center">
         <ProjectsCarousel3D active={active} setActive={setActive} />
@@ -192,6 +277,19 @@ const Projects = () => {
           </div>
         </div>
       </div>
+
+      {/* Nouvelle section 3D : Planète des projets web */}
+      <section id="web-app-planet" className="w-full max-w-5xl mx-auto mt-16 px-4">
+        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold mb-8 text-center text-blue-200">Projets App Web (Planète 3D)</h3>
+        <div className="w-full h-[350px] md:h-[420px] bg-transparent rounded-xl flex items-center justify-center">
+          <Canvas camera={{ position: [0, 2.2, 7], fov: 50 }} shadows>
+            <ambientLight intensity={0.3} />
+            <directionalLight position={[3, 6, 6]} intensity={0.6} />
+            <WebProjectsPlanet />
+            <OrbitControls enablePan={false} enableZoom={false} enableRotate={true} />
+          </Canvas>
+        </div>
+      </section>
     </section>
   );
 };

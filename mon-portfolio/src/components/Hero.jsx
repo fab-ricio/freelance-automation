@@ -30,7 +30,7 @@ const Hero = () => {
       {/* Bouton d’action */}
       <motion.a
         href="#projects"
-        className="inline-block px-4 sm:px-8 py-2 sm:py-3 rounded-full bg-white text-indigo-600 font-semibold shadow-lg hover:bg-indigo-50 dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-600 transition text-xs sm:text-lg"
+        className="inline-block px-3 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full bg-white text-indigo-600 font-semibold shadow-lg hover:bg-indigo-50 dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-600 transition text-xs sm:text-base md:text-lg"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 1.8, duration: 0.5 }}
@@ -38,9 +38,9 @@ const Hero = () => {
         Voir mes projets
       </motion.a>
 
-      {/* Arrière-plan animé simple - un cercle lumineux */}
+      {/* Arrière-plan animé simple - un cercle lumineux responsive */}
       <motion.div
-        className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full bg-gradient-to-tr from-indigo-400 via-purple-400 to-pink-400 opacity-30 blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        className="absolute top-1/2 left-1/2 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-gradient-to-tr from-indigo-400 via-purple-400 to-pink-400 opacity-30 blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
       />
