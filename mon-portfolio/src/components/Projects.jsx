@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html, RoundedBox, Sphere } from '@react-three/drei';
+import ProjetsWeb from './ProjetsWeb';
 
 const projects = [
   {
@@ -23,28 +24,7 @@ const projects = [
   },
 ];
 
-const webApps = [
-  {
-    title: 'Weather App',
-    description: "Application météo moderne avec API et design responsive.",
-    github: 'https://github.com/tonprofil/weather-app',
-    image: '/images/weather.jpg',
-  },
-  {
-    title: 'ToDo List',
-    description: "Gestionnaire de tâches intuitif, rapide et synchronisé.",
-    github: 'https://github.com/tonprofil/todo-list',
-    image: '/images/todo.jpg',
-  },
-  {
-    title: 'Dashboard Perso',
-    description: "Dashboard web personnalisable pour visualiser vos données.",
-    github: 'https://github.com/tonprofil/dashboard',
-    image: '/images/dashboard.jpg',
-  },
-];
-
-function ProjectCard3D({ project, position, rotation, isActive, isSide, onClick }) {
+function ProjectCard3D({ project, position, rotation, isActive, onClick }) {
   const meshRef = useRef();
   useFrame(() => {
     if (meshRef.current) {
@@ -166,7 +146,6 @@ function ProjectsCarousel3D({ active, setActive }) {
           const x = Math.sin(angle) * radius;
           const z = Math.cos(angle) * radius - (offset === 0 ? 0 : 1.5); // recule les cartes latérales
           const isActive = idx === active;
-          const isSide = Math.abs(offset) === 1;
           return (
             <ProjectCard3D
               key={idx}
@@ -174,7 +153,6 @@ function ProjectsCarousel3D({ active, setActive }) {
               position={[x, 0, z]}
               rotation={-angle}
               isActive={isActive}
-              isSide={isSide}
               onClick={() => setActive(idx)}
             />
           );
@@ -182,58 +160,6 @@ function ProjectsCarousel3D({ active, setActive }) {
         <OrbitControls enablePan={false} enableZoom={false} enableRotate={false} />
       </Canvas>
     </>
-  );
-}
-
-function WebProjectsPlanet() {
-  // Satellites = webApps
-  const radius = 4.2; // plus grand
-  const satelliteSize = 0.7; // plus grand
-  const orbitSpeed = 0.4;
-  // Pour l'animation
-  const groupRef = useRef();
-  useFrame(({ clock }) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = clock.getElapsedTime() * orbitSpeed;
-    }
-  });
-  return (
-    <group ref={groupRef}>
-      {/* Planète centrale (plus grande) */}
-      <Sphere args={[2.1, 40, 40]} position={[0, 0, 0]}>
-        <meshStandardMaterial color="#6366f1" emissive="#60a5fa" emissiveIntensity={0.25} metalness={0.7} roughness={0.2} />
-      </Sphere>
-      {/* Satellites pour chaque projet web (plus grands et plus éloignés) */}
-      {webApps.map((app, i) => {
-        const angle = (i / webApps.length) * Math.PI * 2;
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        return (
-          <group key={i} position={[x, 0, z]}>
-            <Sphere args={[satelliteSize, 32, 32]}>
-              <meshStandardMaterial color="#facc15" emissive="#f472b6" emissiveIntensity={0.18} />
-            </Sphere>
-            {/* Image ou icône du projet en Html (toujours visible) */}
-            <Html center distanceFactor={2.6} zIndexRange={[10, 0]}>
-              <div className="flex flex-col items-center">
-                <img
-                  src={app.image}
-                  alt={app.title}
-                  className="w-20 h-20 object-cover rounded-full shadow border-2 border-indigo-400 bg-white/10 mb-1"
-                  style={{ maxWidth: '80px', maxHeight: '80px' }}
-                />
-                <span className="text-sm text-blue-100 font-semibold bg-black/60 px-2 py-0.5 rounded mt-1 shadow-lg">
-                  {app.title}
-                </span>
-              </div>
-            </Html>
-          </group>
-        );
-      })}
-      {/* Légère lumière d'ambiance */}
-      <ambientLight intensity={0.5} />
-      <pointLight position={[0, 3, 3]} intensity={0.7} color="#60a5fa" />
-    </group>
   );
 }
 
@@ -279,17 +205,7 @@ const Projects = () => {
       </div>
 
       {/* Nouvelle section 3D : Planète des projets web */}
-      <section id="web-app-planet" className="w-full max-w-5xl mx-auto mt-16 px-4">
-        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold mb-8 text-center text-blue-200">Projets App Web (Planète 3D)</h3>
-        <div className="w-full h-[350px] md:h-[420px] bg-transparent rounded-xl flex items-center justify-center">
-          <Canvas camera={{ position: [0, 2.2, 7], fov: 50 }} shadows>
-            <ambientLight intensity={0.3} />
-            <directionalLight position={[3, 6, 6]} intensity={0.6} />
-            <WebProjectsPlanet />
-            <OrbitControls enablePan={false} enableZoom={false} enableRotate={true} />
-          </Canvas>
-        </div>
-      </section>
+      {/* <ProjetsWeb /> */}
     </section>
   );
 };

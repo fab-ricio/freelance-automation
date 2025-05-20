@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Hero from './Hero';
 import About from './About';
 import Projects from './Projects';
+import ProjetsWeb from './ProjetsWeb';
 import Services from './Services';
 import Contact from './Contact';
 
@@ -19,6 +20,7 @@ export default function Main() {
         <Hero />
         <About />
         <Projects />
+        <ProjetsWeb />
         <Services />
         <Contact />
       </div>
