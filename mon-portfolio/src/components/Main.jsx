@@ -9,7 +9,7 @@ import Contact from './Contact';
 
 export default function Main() {
   return (
-    <main className="w-full max-w-full relative flex flex-col justify-center items-center text-center min-h-[60vh] sm:min-h-[80vh] md:min-h-screen px-2 sm:px-4 md:px-8 py-4 sm:py-8 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-gray-900 dark:to-gray-800 text-white overflow-x-hidden">
+    <main className="w-full max-w-full relative flex flex-col justify-center items-center text-center min-h-[60vh] sm:min-h-[80vh] md:min-h-screen px-2 sm:px-4 md:px-8 py-4 sm:py-8 bg-gradient-to-br from-[#181c2a] via-[#23265d] to-[#312e81] dark:from-gray-900 dark:to-gray-800 text-white overflow-x-hidden">
       {/* Cercles lumineux animés futuristes */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {/* Cercle principal */}
