@@ -49,7 +49,9 @@ const DarkModeToggle = () => {
             transition={{ duration: 2 }}
             className="fixed inset-0 z-0 pointer-events-none"
             style={{
-              background: 'radial-gradient(ellipse at 90% 90%, #ffb347 0%, #ffcc33 40%, #ff5e62 80%, transparent 100%)',
+              background: isDark
+                ? 'radial-gradient(ellipse at 90% 90%, #6366f1 0%, #0ea5e9 40%, #312e81 80%, transparent 100%)'
+                : 'radial-gradient(ellipse at 90% 90%, #f0e7ff 0%, #a5b4fc 40%, #60a5fa 80%, transparent 100%)',
               mixBlendMode: 'screen',
             }}
           />
@@ -58,8 +60,8 @@ const DarkModeToggle = () => {
       <motion.button
         onClick={toggleDarkMode}
         aria-label="Toggle Dark Mode"
-        className="fixed bottom-4 right-4 w-12 h-12 rounded-full bg-yellow-300 dark:bg-gray-700 flex items-center justify-center shadow-lg cursor-pointer z-50"
-        style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
+        className="fixed bottom-4 right-4 w-12 h-12 rounded-full bg-yellow-200 dark:bg-gray-700 flex items-center justify-center shadow-lg cursor-pointer z-50 border-2 border-yellow-300 dark:border-gray-600"
+        style={{ position: 'fixed', bottom: '1rem', right: '1rem', boxShadow: isDark ? '0 0 24px #6366f1' : '0 0 24px #fde68a' }}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.9 }}
         title="Changer le mode clair/sombre"
@@ -71,7 +73,7 @@ const DarkModeToggle = () => {
               key="dark"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
-              stroke="yellow"
+              stroke="#facc15"
               strokeWidth="2"
               viewBox="0 0 24 24"
               width="24"
@@ -88,7 +90,7 @@ const DarkModeToggle = () => {
             <motion.svg
               key="light"
               xmlns="http://www.w3.org/2000/svg"
-              fill="yellow"
+              fill="#fde047"
               viewBox="0 0 24 24"
               width="24"
               height="24"
@@ -96,8 +98,11 @@ const DarkModeToggle = () => {
               animate={{ rotate: 0, opacity: 1, scale: [1, 1.1, 1] }}
               exit={{ rotate: -20, opacity: 0 }}
             >
-              <path d="M12 2a7 7 0 00-7 7c0 4.418 3.134 8 7 8s7-3.582 7-8a7 7 0 00-7-7z" />
-              <path d="M9 18h6m-3 3v-3" fill="none" stroke="orange" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <ellipse cx="12" cy="10" rx="7" ry="7" fill="#fde047" stroke="#fbbf24" strokeWidth="2" />
+              <path d="M9 18h6m-3 3v-3" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <g>
+                <circle cx="12" cy="10" r="4" fill="#fffde7" opacity="0.7" />
+              </g>
             </motion.svg>
           )}
         </AnimatePresence>
