@@ -224,8 +224,9 @@ function Reflection({ image }) {
 
 const ProjetsWeb = () => {
   return (
-    <section id="web-app-coverflow" className="w-full max-w-5xl mx-auto mt-16 px-4">
+    <section id="web-app-coverflow" className="w-full max-w-5xl mx-auto mt-16 px-4 pt-6 pb-16">
       <h3 className="text-lg sm:text-2xl md:text-3xl font-bold mb-8 text-center text-blue-200">Projets App Web (Apple Coverflow)</h3>
+      <div className="h-8" />
       <div className="w-full h-[350px] md:h-[420px] bg-transparent rounded-xl flex items-center justify-center">
         <CoverflowWebProjects projects={webApps} />
       </div>
