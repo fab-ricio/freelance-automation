@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
 const links = ['Accueil', 'À propos', 'Projets', 'Services', 'Contact'];
@@ -32,31 +32,69 @@ export default function Header() {
             </motion.a>
           ))}
         </nav>
-        {/* Burger Icon */}
-        <div className="md:hidden text-xl cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <FaTimes /> : <FaBars />}
-        </div>
+        {/* Burger Icon animé */}
+        <motion.button
+          className="md:hidden text-xl cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 transition-colors duration-300"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          animate={{ rotate: menuOpen ? 90 : 0, backgroundColor: menuOpen ? 'rgba(49,46,129,0.7)' : 'rgba(0,0,0,0.4)' }}
+          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {menuOpen ? (
+              <motion.span
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center justify-center w-full h-full"
+              >
+                <FaTimes />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="open"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center justify-center w-full h-full"
+              >
+                <FaBars />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
       {/* Mobile Menu */}
-      {menuOpen && (
-        <motion.div
-          initial={{ y: -100 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden bg-black bg-opacity-95 text-white flex flex-col items-center py-4 space-y-2 text-base w-full"
-        >
-          {links.map((link, i) => (
-            <a
-              key={i}
-              href={`#${link.toLowerCase().replace(/ /g, '-')}`}
-              onClick={() => setMenuOpen(false)}
-              className="font-medium hover:text-indigo-400"
-            >
-              {link}
-            </a>
-          ))}
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 32, duration: 0.35 }}
+            className="md:hidden bg-black bg-opacity-95 text-white flex flex-col items-center py-4 space-y-2 text-base w-full shadow-2xl backdrop-blur-lg"
+          >
+            {links.map((link, i) => (
+              <motion.a
+                key={i}
+                href={`#${link.toLowerCase().replace(/ /g, '-')}`}
+                onClick={() => setMenuOpen(false)}
+                className="font-medium hover:text-indigo-400"
+                whileTap={{ scale: 0.96 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05 * i }}
+              >
+                {link}
+              </motion.a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
