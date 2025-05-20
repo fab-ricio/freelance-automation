@@ -44,10 +44,10 @@ const DarkModeToggle = () => {
         {sunset && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
+            animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 2 }}
-            className="fixed inset-0 z-40 pointer-events-none"
+            className="fixed inset-0 z-0 pointer-events-none"
             style={{
               background: 'radial-gradient(ellipse at 90% 90%, #ffb347 0%, #ffcc33 40%, #ff5e62 80%, transparent 100%)',
               mixBlendMode: 'screen',
