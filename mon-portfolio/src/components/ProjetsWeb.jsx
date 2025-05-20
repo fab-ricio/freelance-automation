@@ -97,9 +97,42 @@ function CoverflowWebProjects({ projects }) {
           const rotateY = offset * -35;
           const scale = offset === 0 ? 1.07 : 0.92;
           const zIndex = 10 - Math.abs(offset);
-          const blur = offset === 0 ? '' : 'backdrop-blur-[6px] blur-[2px] grayscale opacity-70';
-          const shadow = offset === 0 ? 'shadow-[0_4px_16px_#6366f1bb,0_0_8px_#facc1588]' : 'shadow-[0_1px_6px_#6366f188]';
-          const border = offset === 0 ? 'border-2 border-blue-400/40' : 'border border-indigo-400/20';
+          if (offset === 0) {
+            return (
+              <motion.div
+                key={i}
+                className={`absolute left-1/2 top-1/2 w-64 h-80 md:w-80 md:h-96 flex flex-col items-center justify-center transition-all duration-500 ease-[cubic-bezier(.77,0,.18,1)] bg-gradient-to-br from-[#232b4e] via-[#2e3a6a] to-[#3b82f6] border-2 border-blue-400/60 shadow-[0_4px_24px_#6366f1cc,0_0_16px_#facc15bb] backdrop-blur-[2px]`} 
+                style={{
+                  zIndex,
+                  transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) perspective(1200px) rotateY(${rotateY}deg)`
+                }}
+                tabIndex={0}
+                onClick={() => setActive(i)}
+              >
+                <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10 transition-all duration-500 relative z-10" />
+                <h3 className="text-lg md:text-2xl font-bold mb-2 text-blue-100 text-center uppercase drop-shadow futuristic-font transition-all duration-500 relative z-10 bg-gradient-to-r from-[#60a5fa] via-[#facc15] to-[#818cf8] bg-clip-text text-transparent">
+                  {project.title}
+                </h3>
+                <p className="text-gray-100 mb-3 text-sm md:text-base opacity-95 text-center px-2 transition-all duration-500 relative z-10">
+                  {project.description}
+                </p>
+                <a
+                  href={project.github}
+                  className="inline-block px-5 py-2 rounded-full bg-gradient-to-r from-[#60a5fa] via-[#facc15] to-[#818cf8] text-gray-900 font-bold shadow-lg transition-all duration-300 text-xs md:text-base mt-2 relative z-10 border border-blue-300/40"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textShadow: '0 0 12px #facc15cc,0 0 8px #60a5fa' }}
+                >
+                  Voir sur GitHub
+                </a>
+                {/* Reflet Apple */}
+                <Reflection image={project.image} />
+              </motion.div>
+            );
+          }
+          const blur = 'backdrop-blur-[6px] blur-[2px] grayscale opacity-70';
+          const shadow = 'shadow-[0_1px_6px_#6366f188]';
+          const border = 'border border-indigo-400/20';
           return (
             <motion.div
               key={i}
