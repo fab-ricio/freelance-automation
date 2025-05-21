@@ -148,14 +148,46 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-70 backdrop-blur-lg shadow-md">
       <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-3 flex flex-col sm:flex-row justify-between items-center text-white gap-2 sm:gap-0 w-full">
         {/* Logo */}
-        <motion.h1
-          className="text-base sm:text-xl md:text-2xl font-bold mb-2 sm:mb-0"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+        <motion.div
+          className="flex items-center gap-2 group cursor-pointer"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7 }}
         >
-          MonPortfolio
-        </motion.h1>
+          <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="cyber-glow-header" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stopColor="#0ff" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#23265d" stopOpacity="0.1" />
+              </radialGradient>
+              <linearGradient id="cyber-stroke-header" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#0ff" />
+                <stop offset="1" stopColor="#f472b6" />
+              </linearGradient>
+              <linearGradient id="cyber-eye-header" x1="0" y1="0" x2="64" y2="0" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#60a5fa" />
+                <stop offset="1" stopColor="#a5b4fc" />
+              </linearGradient>
+            </defs>
+            <ellipse cx="32" cy="32" rx="28" ry="28" fill="url(#cyber-glow-header)" />
+            <path d="M14 44 Q32 60 50 44 Q58 30 32 12 Q6 30 14 44Z" fill="#181c2a" stroke="url(#cyber-stroke-header)" strokeWidth="3" />
+            <ellipse cx="24" cy="38" rx="3.2" ry="1.5" fill="url(#cyber-eye-header)" />
+            <ellipse cx="40" cy="38" rx="3.2" ry="1.5" fill="url(#cyber-eye-header)" />
+            <rect x="27" y="46" width="10" height="2.2" rx="1" fill="#0ff" />
+            <line x1="32" y1="12" x2="32" y2="4" stroke="#0ff" strokeWidth="1.5" strokeDasharray="4 2" />
+            <line x1="14" y1="44" x2="4" y2="58" stroke="#0ff" strokeWidth="1.5" strokeDasharray="4 2" />
+            <line x1="50" y1="44" x2="60" y2="58" stroke="#0ff" strokeWidth="1.5" strokeDasharray="4 2" />
+          </svg>
+          <motion.h1
+            className="text-base sm:text-xl md:text-2xl font-bold mb-2 sm:mb-0 group-hover:text-cyan-400 transition-colors duration-300"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            style={{ letterSpacing: '0.08em' }}
+          >
+            MonPortfolio
+          </motion.h1>
+        </motion.div>
         {/* Desktop Menu */}
         <nav className="hidden md:flex gap-4 sm:gap-8 text-xs sm:text-sm font-medium items-center">
           {links.map((link, i) => (
