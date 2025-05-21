@@ -18,6 +18,8 @@ export default function Header() {
   const [loading, setLoading] = useState(true);
   const [blink, setBlink] = useState(false);
   const [blinkTimeout, setBlinkTimeout] = useState(null);
+  const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
+  const logoRef = React.useRef();
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1700); // 1.7s futuriste
@@ -57,6 +59,33 @@ export default function Header() {
       clearTimeout(timeout);
     };
   }, [loading]);
+
+  // Ajout : les yeux suivent la souris
+  React.useEffect(() => {
+    function handleMove(e) {
+      if (!logoRef.current) return;
+      const rect = logoRef.current.getBoundingClientRect();
+      // centre du logo
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      // position souris
+      const mx = e.clientX;
+      const my = e.clientY;
+      // vecteur direction
+      let dx = mx - cx;
+      let dy = my - cy;
+      // distance max pour l'effet (pour éviter de sortir de l'œil)
+      const maxDist = 7;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > maxDist) {
+        dx = (dx / dist) * maxDist;
+        dy = (dy / dist) * maxDist;
+      }
+      setEyeOffset({ x: dx, y: dy });
+    }
+    window.addEventListener('mousemove', handleMove);
+    return () => window.removeEventListener('mousemove', handleMove);
+  }, []);
 
   function handleLogoClick() {
     setBlink(true);
@@ -198,6 +227,7 @@ export default function Header() {
           transition={{ duration: 0.7 }}
           onClick={handleLogoClick}
           title="Cyberbot - cliquez pour un clin d'œil !"
+          ref={logoRef}
         >
           <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -216,17 +246,23 @@ export default function Header() {
             </defs>
             <ellipse cx="32" cy="32" rx="28" ry="28" fill="url(#cyber-glow-header)" />
             <path d="M14 44 Q32 60 50 44 Q58 30 32 12 Q6 30 14 44Z" fill="#181c2a" stroke="url(#cyber-stroke-header)" strokeWidth="3" />
-            {/* Yeux animés (clignement) */}
+            {/* Yeux animés (clignement + suivi souris) */}
             <motion.ellipse
-              cx="24" cy="38" rx="3.2" ry={blink ? 0.3 : 1.5}
+              cx={24 + eyeOffset.x * 0.5}
+              cy={38 + eyeOffset.y * 0.5}
+              rx="3.2"
+              ry={blink ? 0.3 : 1.5}
               fill="url(#cyber-eye-header)"
-              animate={{ ry: blink ? 0.3 : 1.5 }}
+              animate={{ ry: blink ? 0.3 : 1.5, cx: 24 + eyeOffset.x * 0.5, cy: 38 + eyeOffset.y * 0.5 }}
               transition={{ duration: 0.13, ease: 'easeInOut' }}
             />
             <motion.ellipse
-              cx="40" cy="38" rx="3.2" ry={blink ? 0.3 : 1.5}
+              cx={40 + eyeOffset.x * 0.5}
+              cy={38 + eyeOffset.y * 0.5}
+              rx="3.2"
+              ry={blink ? 0.3 : 1.5}
               fill="url(#cyber-eye-header)"
-              animate={{ ry: blink ? 0.3 : 1.5 }}
+              animate={{ ry: blink ? 0.3 : 1.5, cx: 40 + eyeOffset.x * 0.5, cy: 38 + eyeOffset.y * 0.5 }}
               transition={{ duration: 0.13, ease: 'easeInOut' }}
             />
             <rect x="27" y="46" width="10" height="2.2" rx="1" fill="#0ff" />
