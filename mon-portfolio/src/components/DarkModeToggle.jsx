@@ -60,11 +60,12 @@ const DarkModeToggle = () => {
       <motion.button
         onClick={toggleDarkMode}
         aria-label="Toggle Dark Mode"
-        className="fixed bottom-4 right-4 w-12 h-12 rounded-full bg-yellow-200 dark:bg-gray-700 flex items-center justify-center shadow-lg cursor-pointer z-50 border-2 border-yellow-300 dark:border-gray-600"
-        style={{ position: 'fixed', bottom: '1rem', right: '1rem', boxShadow: isDark ? '0 0 24px #6366f1' : '0 0 24px #fde68a' }}
+        className="fixed right-4 bottom-4 md:right-8 md:bottom-8 w-12 h-12 rounded-full bg-yellow-200 dark:bg-gray-700 flex items-center justify-center shadow-lg cursor-pointer z-50 border-2 border-yellow-300 dark:border-gray-600 transition-all duration-500"
+        style={{ boxShadow: isDark ? '0 0 24px #6366f1' : '0 0 24px #fde68a' }}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.9 }}
         title="Changer le mode clair/sombre"
+        id="darkmode-toggle-btn"
       >
         <AnimatePresence mode="wait">
           {isDark ? (

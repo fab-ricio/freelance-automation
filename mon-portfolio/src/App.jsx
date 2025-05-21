@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
 import DarkModeToggle from './components/DarkModeToggle';
+import StickyDarkModeHelper from './components/StickyDarkModeHelper';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Main />
       <Footer />
       <DarkModeToggle />
+      <StickyDarkModeHelper />
       </div>
     </>
   );
