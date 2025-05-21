@@ -16,11 +16,54 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [blink, setBlink] = useState(false);
+  const [blinkTimeout, setBlinkTimeout] = useState(null);
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1700); // 1.7s futuriste
     return () => clearTimeout(timer);
   }, []);
+
+  // Blinking automatique façon "humain" (plus naturel, double clignement parfois, durée variable)
+  React.useEffect(() => {
+    if (loading) return;
+    let timeout;
+    let isUnmounted = false;
+    function scheduleBlink() {
+      // Durée d'attente entre 2.5s et 6s
+      const next = 2500 + Math.random() * 3500;
+      timeout = setTimeout(() => {
+        if (isUnmounted) return;
+        // Parfois double clignement (10% de chance)
+        if (Math.random() < 0.1) {
+          setBlink(true);
+          setTimeout(() => {
+            setBlink(false);
+            setTimeout(() => {
+              setBlink(true);
+              setTimeout(() => setBlink(false), 110);
+            }, 120);
+          }, 110);
+        } else {
+          setBlink(true);
+          setTimeout(() => setBlink(false), 140 + Math.random() * 60);
+        }
+        scheduleBlink();
+      }, next);
+    }
+    scheduleBlink();
+    return () => {
+      isUnmounted = true;
+      clearTimeout(timeout);
+    };
+  }, [loading]);
+
+  function handleLogoClick() {
+    setBlink(true);
+    if (blinkTimeout) clearTimeout(blinkTimeout);
+    const t = setTimeout(() => setBlink(false), 220);
+    setBlinkTimeout(t);
+  }
 
   if (loading) {
     return (
@@ -147,12 +190,14 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-70 backdrop-blur-lg shadow-md">
       <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-3 flex flex-col sm:flex-row justify-between items-center text-white gap-2 sm:gap-0 w-full">
-        {/* Logo */}
+        {/* Logo avec clignement et clic */}
         <motion.div
           className="flex items-center gap-2 group cursor-pointer"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
+          onClick={handleLogoClick}
+          title="Cyberbot - cliquez pour un clin d'œil !"
         >
           <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -171,8 +216,19 @@ export default function Header() {
             </defs>
             <ellipse cx="32" cy="32" rx="28" ry="28" fill="url(#cyber-glow-header)" />
             <path d="M14 44 Q32 60 50 44 Q58 30 32 12 Q6 30 14 44Z" fill="#181c2a" stroke="url(#cyber-stroke-header)" strokeWidth="3" />
-            <ellipse cx="24" cy="38" rx="3.2" ry="1.5" fill="url(#cyber-eye-header)" />
-            <ellipse cx="40" cy="38" rx="3.2" ry="1.5" fill="url(#cyber-eye-header)" />
+            {/* Yeux animés (clignement) */}
+            <motion.ellipse
+              cx="24" cy="38" rx="3.2" ry={blink ? 0.3 : 1.5}
+              fill="url(#cyber-eye-header)"
+              animate={{ ry: blink ? 0.3 : 1.5 }}
+              transition={{ duration: 0.13, ease: 'easeInOut' }}
+            />
+            <motion.ellipse
+              cx="40" cy="38" rx="3.2" ry={blink ? 0.3 : 1.5}
+              fill="url(#cyber-eye-header)"
+              animate={{ ry: blink ? 0.3 : 1.5 }}
+              transition={{ duration: 0.13, ease: 'easeInOut' }}
+            />
             <rect x="27" y="46" width="10" height="2.2" rx="1" fill="#0ff" />
             <line x1="32" y1="12" x2="32" y2="4" stroke="#0ff" strokeWidth="1.5" strokeDasharray="4 2" />
             <line x1="14" y1="44" x2="4" y2="58" stroke="#0ff" strokeWidth="1.5" strokeDasharray="4 2" />
