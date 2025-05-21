@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import FuturisticLoader from './FuturisticLoader';
 
 const links = ['Accueil', 'À propos', 'Projets', 'Services', 'Contact'];
 const servicesList = [
@@ -14,6 +15,117 @@ const servicesList = [
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1700); // 1.7s futuriste
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key="loader"
+          initial={{ opacity: 1, scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.96 }}
+          transition={{ duration: 0.7, ease: 'easeInOut' }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-[#181c2a] via-[#23265d] to-[#312e81] overflow-hidden"
+        >
+          {/* Effet scan lumineux */}
+          <motion.div
+            className="absolute top-1/2 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60 blur-2xl pointer-events-none"
+            initial={{ x: '-100vw', opacity: 0.2 }}
+            animate={{ x: ['-100vw', '100vw'], opacity: [0.2, 0.7, 0.2] }}
+            transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+            style={{ zIndex: 2 }}
+          />
+          {/* Logo SVG animé */}
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: [0.7, 1.1, 1], opacity: [0, 1, 1] }}
+            transition={{ duration: 1.1, ease: 'easeInOut' }}
+            className="mb-8 z-10"
+          >
+            <svg width="80" height="80" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.7" />
+                  <stop offset="100%" stopColor="#312e81" stopOpacity="0.2" />
+                </radialGradient>
+                <linearGradient id="futurist-stroke" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#60a5fa" />
+                  <stop offset="1" stopColor="#a5b4fc" />
+                </linearGradient>
+              </defs>
+              <motion.circle
+                cx="19" cy="19" r="16"
+                fill="url(#glow)"
+                initial={{ opacity: 0.5 }}
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+              />
+              <motion.path
+                d="M10 28L19 7L28 28Z"
+                fill="#23265d"
+                stroke="url(#futurist-stroke)"
+                strokeWidth="2.2"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: [0, 1, 0] }}
+                transition={{ duration: 1.6, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+              />
+              <motion.circle
+                cx="19" cy="19" r="7"
+                fill="#181c2a"
+                stroke="#60a5fa"
+                strokeWidth="1.5"
+                initial={{ scale: 0.8, opacity: 0.7 }}
+                animate={{ scale: [0.8, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+              />
+              <motion.circle
+                cx="19" cy="19" r="2.5"
+                fill="#60a5fa"
+                initial={{ scale: 1, opacity: 0.7 }}
+                animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+              />
+            </svg>
+          </motion.div>
+          {/* Texte glitch animé */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.7 }}
+            className="text-xl md:text-2xl font-bold text-blue-100 tracking-widest drop-shadow-lg z-10 font-mono"
+            style={{ letterSpacing: '0.15em' }}
+          >
+            <span className="glitch" style={{ position: 'relative', display: 'inline-block' }}>
+              <span style={{ position: 'absolute', left: 0, top: 0, color: '#60a5fa', opacity: 0.7, filter: 'blur(1px)', zIndex: 1, animation: 'glitch1 1.2s infinite linear alternate' }}>Bienvenue dans le futur</span>
+              <span style={{ position: 'absolute', left: 0, top: 0, color: '#f472b6', opacity: 0.7, filter: 'blur(1px)', zIndex: 1, animation: 'glitch2 1.2s infinite linear alternate' }}>Bienvenue dans le futur</span>
+              <span style={{ position: 'relative', zIndex: 2 }}>Bienvenue dans le futur</span>
+            </span>
+            <style>{`
+              @keyframes glitch1 { 0%{transform:translate(0,0)} 20%{transform:translate(-2px,1px)} 40%{transform:translate(-1px,-2px)} 60%{transform:translate(-3px,0)} 80%{transform:translate(2px,2px)} 100%{transform:translate(0,0)} }
+              @keyframes glitch2 { 0%{transform:translate(0,0)} 20%{transform:translate(2px,-1px)} 40%{transform:translate(1px,2px)} 60%{transform:translate(3px,0)} 80%{transform:translate(-2px,-2px)} 100%{transform:translate(0,0)} }
+            `}</style>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.7 }}
+            className="text-base md:text-lg font-semibold text-blue-200 mt-4 z-10"
+            style={{ letterSpacing: '0.12em' }}
+          >
+            <span>
+              <span className="inline-block animate-pulse">Chargement…</span>
+            </span>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-70 backdrop-blur-lg shadow-md">
