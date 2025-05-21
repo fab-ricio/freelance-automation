@@ -41,56 +41,73 @@ export default function Header() {
             transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
             style={{ zIndex: 2 }}
           />
-          {/* Logo SVG animé */}
+          {/* Logo SVG animé unique et futuriste */}
           <motion.div
             initial={{ scale: 0.7, opacity: 0 }}
             animate={{ scale: [0.7, 1.1, 1], opacity: [0, 1, 1] }}
             transition={{ duration: 1.1, ease: 'easeInOut' }}
             className="mb-8 z-10"
           >
-            <svg width="80" height="80" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <radialGradient id="glow" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#312e81" stopOpacity="0.2" />
+                <radialGradient id="cyber-glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stopColor="#0ff" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#23265d" stopOpacity="0.1" />
                 </radialGradient>
-                <linearGradient id="futurist-stroke" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+                <linearGradient id="cyber-stroke" x1="0" y1="0" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#0ff" />
+                  <stop offset="1" stopColor="#f472b6" />
+                </linearGradient>
+                <linearGradient id="cyber-eye" x1="0" y1="0" x2="90" y2="0" gradientUnits="userSpaceOnUse">
                   <stop stopColor="#60a5fa" />
                   <stop offset="1" stopColor="#a5b4fc" />
                 </linearGradient>
               </defs>
-              <motion.circle
-                cx="19" cy="19" r="16"
-                fill="url(#glow)"
+              {/* Halo lumineux */}
+              <motion.ellipse
+                cx="45" cy="45" rx="38" ry="38"
+                fill="url(#cyber-glow)"
                 initial={{ opacity: 0.5 }}
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
               />
+              {/* Visage robotique stylisé */}
               <motion.path
-                d="M10 28L19 7L28 28Z"
-                fill="#23265d"
-                stroke="url(#futurist-stroke)"
-                strokeWidth="2.2"
+                d="M20 60 Q45 80 70 60 Q80 40 45 20 Q10 40 20 60Z"
+                fill="#181c2a"
+                stroke="url(#cyber-stroke)"
+                strokeWidth="3.5"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: [0, 1, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+                transition={{ duration: 1.8, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
               />
-              <motion.circle
-                cx="19" cy="19" r="7"
-                fill="#181c2a"
-                stroke="#60a5fa"
-                strokeWidth="1.5"
-                initial={{ scale: 0.8, opacity: 0.7 }}
-                animate={{ scale: [0.8, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+              {/* Yeux lumineux */}
+              <motion.ellipse
+                cx="33" cy="48" rx="4.5" ry="2.2"
+                fill="url(#cyber-eye)"
+                initial={{ opacity: 0.5, scale: 1 }}
+                animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.1, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+              />
+              <motion.ellipse
+                cx="57" cy="48" rx="4.5" ry="2.2"
+                fill="url(#cyber-eye)"
+                initial={{ opacity: 0.5, scale: 1 }}
+                animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.1, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut', delay: 0.2 }}
+              />
+              {/* Bouche LED */}
+              <motion.rect
+                x="38" y="60" width="14" height="3.5" rx="1.5"
+                fill="#0ff"
+                initial={{ opacity: 0.5, scaleX: 1 }}
+                animate={{ opacity: [0.5, 1, 0.5], scaleX: [1, 1.3, 1] }}
                 transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
               />
-              <motion.circle
-                cx="19" cy="19" r="2.5"
-                fill="#60a5fa"
-                initial={{ scale: 1, opacity: 0.7 }}
-                animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
-              />
+              {/* Circuit lines */}
+              <motion.line x1="45" y1="20" x2="45" y2="8" stroke="#0ff" strokeWidth="2" strokeDasharray="6 4" initial={{ opacity: 0.5 }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }} />
+              <motion.line x1="20" y1="60" x2="10" y2="75" stroke="#0ff" strokeWidth="2" strokeDasharray="6 4" initial={{ opacity: 0.5 }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut', delay: 0.3 }} />
+              <motion.line x1="70" y1="60" x2="80" y2="75" stroke="#0ff" strokeWidth="2" strokeDasharray="6 4" initial={{ opacity: 0.5 }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut', delay: 0.6 }} />
             </svg>
           </motion.div>
           {/* Texte glitch animé */}
