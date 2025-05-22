@@ -2,24 +2,54 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="w-full max-w-full bg-gray-800 text-white py-3 sm:py-6 px-2 sm:px-4 flex flex-col sm:flex-row justify-between items-center text-xs sm:text-sm gap-2 sm:gap-0 text-center">
-      <p className="mb-2 sm:mb-0">&copy; {new Date().getFullYear()} Ton Nom. Tous droits réservés.</p>
-      <div className="space-x-2 sm:space-x-4 flex flex-row justify-center sm:justify-end">
+    <footer className="w-full max-w-full bg-gradient-to-br from-[#3b4cca] to-[#60a5fa] dark:bg-gradient-to-br dark:from-[#232b4e]/90 dark:via-[#232b4e]/80 dark:to-[#3b82f6]/80 text-[#e0e7ff] dark:text-blue-100 py-6 px-2 sm:px-8 flex flex-col sm:flex-row justify-between items-center text-xs sm:text-sm gap-4 sm:gap-0 text-center shadow-[0_0_16px_#818cf833] border-t border-blue-400/20 relative overflow-hidden z-50" style={{backdropFilter:'blur(4px)'}}>
+      {/* Glow accent */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-1 bg-gradient-to-r from-[#facc15]/10 via-[#818cf8]/20 to-[#60a5fa]/0 blur-[1px] opacity-40 rounded-full pointer-events-none select-none z-0 dark:from-[#818cf8]/40 dark:via-[#facc15]/20 dark:to-[#3b82f6]/0 dark:opacity-60" aria-hidden="true" />
+      {/* Glass effect + gradients */}
+      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
+        <div className="absolute left-1/2 top-0 w-2/3 h-24 bg-gradient-to-r from-[#818cf8]/5 via-[#facc15]/2 to-transparent blur-md opacity-10 -translate-x-1/2 dark:from-[#818cf8]/20 dark:via-[#facc15]/5 dark:opacity-30" />
+        <div className="absolute right-0 bottom-0 w-1/3 h-16 bg-gradient-to-l from-[#60a5fa]/5 to-transparent blur-md opacity-5 dark:from-[#3b82f6]/15 dark:opacity-20" />
+      </div>
+      {/* Infos légales & contact */}
+      <div className="z-20 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-[#e0e7ff]/90 dark:text-blue-100/90 font-light">
+        <span className="flex items-center gap-2">
+          <span className="inline-block w-2 h-2 rounded-full bg-[#facc15] animate-pulse" />
+          <span className="tracking-wide font-semibold">&copy; {new Date().getFullYear()} Ton Nom</span>
+        </span>
+        <span className="hidden sm:inline text-blue-300/40">|</span>
+        <span className="flex items-center gap-2">
+          <svg className="w-4 h-4 text-[#facc15] opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25V6.75A2.25 2.25 0 0 0 18.75 4.5h-13.5A2.25 2.25 0 0 0 3 6.75v10.5A2.25 2.25 0 0 0 5.25 19.5h13.5A2.25 2.25 0 0 0 21 17.25v-1.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25l-9 6.75-9-6.75" /></svg>
+          <a href="mailto:email@domaine.com" className="underline hover:text-[#facc15] transition">email@domaine.com</a>
+        </span>
+        <span className="hidden sm:inline text-blue-300/40">|</span>
+        <span className="flex items-center gap-2">
+          <svg className="w-4 h-4 text-[#60a5fa] opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0-1.243 1.007-2.25 2.25-2.25h2.25c.966 0 1.797.63 2.09 1.553l.72 2.16a2.25 2.25 0 0 1-.516 2.34l-1.08 1.08a15.045 15.045 0 0 0 6.36 6.36l1.08-1.08a2.25 2.25 0 0 1 2.34-.516l2.16.72A2.25 2.25 0 0 1 19.5 17.25v2.25a2.25 2.25 0 0 1-2.25 2.25C7.798 21.75 2.25 16.202 2.25 9.75z" /></svg>
+          <a href="tel:+33612345678" className="underline hover:text-[#facc15] transition">06 12 34 56 78</a>
+        </span>
+      </div>
+      {/* Réseaux sociaux */}
+      <div className="space-x-3 flex flex-row justify-center sm:justify-end z-20">
         <a
           href="https://github.com/tonprofil"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:underline"
+          className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#232b4e] via-[#3b82f6] to-[#818cf8] shadow-md border border-blue-400/40 hover:from-[#818cf8] hover:to-[#60a5fa] hover:text-[#facc15] transition-all duration-300 group ring-1 ring-[#818cf8]/30"
+          aria-label="GitHub"
         >
-          GitHub
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-blue-100 group-hover:text-[#facc15]">
+            <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.29 9.29 0 0 1 12 6.84c.85.004 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2z" />
+          </svg>
         </a>
         <a
           href="https://linkedin.com/in/tonprofil"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:underline"
+          className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#818cf8] via-[#facc15] to-[#60a5fa] shadow-md border border-blue-300/40 hover:from-[#facc15] hover:to-[#818cf8] hover:text-[#232b4e] transition-all duration-300 group ring-1 ring-[#facc15]/20"
+          aria-label="LinkedIn"
         >
-          LinkedIn
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-6 h-6 text-blue-900 group-hover:text-[#232b4e]">
+            <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 11.28h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-10h2.88v1.36h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v5.59z" />
+          </svg>
         </a>
       </div>
     </footer>
