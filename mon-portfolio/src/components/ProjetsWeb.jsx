@@ -6,18 +6,23 @@ const webApps = [
     title: 'Weather App',
     description: "Application météo moderne avec API et design responsive.",
     github: 'https://github.com/tonprofil/weather-app',
-    image: '/images/weather.jpg',
+    demo: 'https://demo.weather-app.com',
+    image: '/images/Weather-app.png', // image principale
+    imageAlt: '/images/weather.jpg',   // image alternative (ancienne)
   },
   {
     title: 'ToDo List',
     description: "Gestionnaire de tâches intuitif, rapide et synchronisé.",
     github: 'https://github.com/tonprofil/todo-list',
-    image: '/images/todo.jpg',
+    demo: 'https://demo.todo-list.com',
+    image: '/images/to-do.png', // image principale
+    imageAlt: '/images/todo.jpg',   // image alternative (ancienne)
   },
   {
     title: 'Dashboard Perso',
     description: "Dashboard web personnalisable pour visualiser vos données.",
     github: 'https://github.com/tonprofil/dashboard',
+    demo: 'https://demo.dashboard.com',
     image: '/images/dashboard.jpg',
   },
 ];
@@ -111,36 +116,58 @@ function CoverflowWebProjects({ projects }) {
                 layout
                 transition={{ type: 'spring', stiffness: 80, damping: 22, duration: 0.7 }}
               >
-                <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-2xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10 transition-all duration-500 relative z-10" />
+                <img src={project.image} alt={project.title} className="w-full h-40 md:h-52 object-cover rounded-t-3xl shadow-lg border-b-2 border-indigo-400 bg-white/10 transition-all duration-500" onError={e => { if (project.imageAlt) { e.target.onerror = null; e.target.src = project.imageAlt; } }} />
                 <h3 className="text-lg md:text-2xl font-bold mb-2 text-blue-100 text-center uppercase drop-shadow futuristic-font transition-all duration-500 relative z-10 bg-gradient-to-r from-[#60a5fa] via-[#facc15] to-[#818cf8] bg-clip-text text-transparent">
                   {project.title}
                 </h3>
                 <p className="text-gray-100 mb-3 text-sm md:text-base opacity-95 text-center px-2 transition-all duration-500 relative z-10">
                   {project.description}
                 </p>
-                <a
-                  href={project.github}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-gradient-to-r from-[#60a5fa] via-[#facc15] to-[#818cf8] text-gray-900 font-bold shadow-lg transition-all duration-300 text-xs md:text-base mt-2 relative z-10 border border-blue-300/40 group"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Voir sur GitHub"
-                >
-                  <motion.svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-7 h-7 text-gray-900 group-hover:text-[#232b4e]"
-                    initial={{ scale: 1, rotate: 0 }}
-                    whileHover={{ scale: 1.18, rotate: -10 }}
-                    animate={{
-                      scale: [1, 1.08, 1],
-                      rotate: [0, 8, -8, 0]
-                    }}
-                    transition={{ duration: 2.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <a
+                    href={project.github}
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#232b4e] via-[#3b82f6] to-[#818cf8] shadow-[0_2px_12px_#6366f1bb] border border-blue-400/40 hover:from-[#818cf8] hover:to-[#60a5fa] hover:text-[#facc15] transition-all duration-300 backdrop-blur-[2px] ring-2 ring-[#818cf8]/30 ring-offset-2 ring-offset-[#232b4e] group-hover:scale-105 group-active:scale-95"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Voir sur GitHub"
                   >
-                    <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.29 9.29 0 0 1 12 6.84c.85.004 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2z" />
-                  </motion.svg>
-                </a>
+                    <motion.svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-7 h-7 text-blue-100 group-hover:text-[#facc15]"
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.18 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.29 9.29 0 0 1 12 6.84c.85.004 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2z" />
+                    </motion.svg>
+                  </a>
+                  {project.demo && (
+                    <a
+                      href={project.demo}
+                      className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#818cf8] via-[#facc15] to-[#60a5fa] shadow-[0_2px_12px_#818cf8bb] border border-blue-300/40 hover:from-[#facc15] hover:to-[#818cf8] hover:text-[#232b4e] transition-all duration-300 backdrop-blur-[2px] ring-2 ring-[#facc15]/30 ring-offset-2 ring-offset-[#232b4e] group-hover:scale-105 group-active:scale-95"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Voir la démo"
+                    >
+                      <motion.svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.7"
+                        className="w-7 h-7 text-blue-900 group-hover:text-[#232b4e]"
+                        initial={{ scale: 1 }}
+                        whileHover={{ scale: 1.18 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.5" />
+                        <path d="M10 9l6 3-6 3V9z" fill="currentColor" />
+                      </motion.svg>
+                    </a>
+                  )}
+                </div>
                 {/* Reflet Apple */}
                 <Reflection image={project.image} />
               </motion.div>
@@ -163,34 +190,54 @@ function CoverflowWebProjects({ projects }) {
               tabIndex={0}
               onClick={() => setActive(i)}
             >
-              <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-2xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10 transition-all duration-500" />
+              <img src={project.image} alt={project.title} className="w-full h-40 md:h-52 object-cover rounded-t-3xl shadow-lg border-b-2 border-indigo-400 bg-white/10 transition-all duration-500" onError={e => { if (project.imageAlt) { e.target.onerror = null; e.target.src = project.imageAlt; } }} />
               <h3 className="text-lg md:text-2xl font-bold mb-2 text-blue-200 text-center uppercase drop-shadow futuristic-font transition-all duration-500">{project.title}</h3>
               <p className="text-gray-200 mb-3 text-sm md:text-base opacity-90 text-center px-2 transition-all duration-500">{project.description}</p>
-              <a
-                href={project.github}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-gradient-to-r from-[#60a5fa] via-[#facc15] to-[#818cf8] text-gray-900 font-bold shadow-lg transition-all duration-300 text-xs md:text-base mt-2 relative z-10 border border-blue-300/40 group"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Voir sur GitHub"
-              >
-                <motion.svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-7 h-7 text-gray-900 group-hover:text-[#232b4e]"
-                  initial={{ scale: 1, rotate: 0 }}
-                  whileHover={{ scale: 1.18, rotate: -10 }}
-                  animate={{
-                    scale: [1, 1.08, 1],
-                    rotate: [0, 8, -8, 0]
-                  }}
-                  transition={{ duration: 2.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+              <div className="flex items-center justify-center gap-2 mt-2">
+                <a
+                  href={project.github}
+                  className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#232b4e] via-[#3b82f6] to-[#818cf8] shadow-[0_2px_12px_#6366f1bb] border border-blue-400/40 hover:from-[#818cf8] hover:to-[#60a5fa] hover:text-[#facc15] transition-all duration-300 backdrop-blur-[2px] ring-2 ring-[#818cf8]/30 ring-offset-2 ring-offset-[#232b4e] group-hover:scale-105 group-active:scale-95"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Voir sur GitHub"
                 >
-                  <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.29 9.29 0 0 1 12 6.84c.85.004 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2z" />
-                </motion.svg>
-              </a>
-              {/* Reflet Apple */}
-              {offset === 0 && <Reflection image={project.image} />}
+                  <motion.svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-7 h-7 text-blue-100 group-hover:text-[#facc15]"
+                    initial={{ scale: 1 }}
+                    whileHover={{ scale: 1.18 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.29 9.29 0 0 1 12 6.84c.85.004 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2z" />
+                  </motion.svg>
+                </a>
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#818cf8] via-[#facc15] to-[#60a5fa] shadow-[0_2px_12px_#818cf8bb] border border-blue-300/40 hover:from-[#facc15] hover:to-[#818cf8] hover:text-[#232b4e] transition-all duration-300 backdrop-blur-[2px] ring-2 ring-[#facc15]/30 ring-offset-2 ring-offset-[#232b4e] group-hover:scale-105 group-active:scale-95"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Voir la démo"
+                  >
+                    <motion.svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      className="w-7 h-7 text-blue-900 group-hover:text-[#232b4e]"
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.18 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.5" />
+                      <path d="M10 9l6 3-6 3V9z" fill="currentColor" />
+                    </motion.svg>
+                  </a>
+                )}
+              </div>
             </motion.div>
           );
         })}
