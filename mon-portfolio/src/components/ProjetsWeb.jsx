@@ -101,7 +101,7 @@ function CoverflowWebProjects({ projects }) {
             return (
               <motion.div
                 key={i}
-                className={`absolute left-1/2 top-1/2 w-64 h-80 md:w-80 md:h-96 flex flex-col items-center justify-center bg-gradient-to-br from-[#232b4e] via-[#2e3a6a] to-[#3b82f6] border-2 border-blue-400/60 shadow-[0_4px_24px_#6366f1cc,0_0_16px_#facc15bb] backdrop-blur-[2px] transition-all duration-700 ease-[cubic-bezier(.77,0,.18,1)]`}
+                className={`absolute left-1/2 top-1/2 w-64 h-80 md:w-80 md:h-96 flex flex-col items-center justify-center bg-gradient-to-br from-[#232b4e] via-[#2e3a6a] to-[#3b82f6] border-2 border-blue-400/60 shadow-[0_4px_24px_#6366f1cc,0_0_16px_#facc15bb] rounded-3xl transition-all duration-700 ease-[cubic-bezier(.77,0,.18,1)]`}
                 style={{
                   zIndex,
                   transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) perspective(1200px) rotateY(${rotateY}deg)`
@@ -111,7 +111,7 @@ function CoverflowWebProjects({ projects }) {
                 layout
                 transition={{ type: 'spring', stiffness: 80, damping: 22, duration: 0.7 }}
               >
-                <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10 transition-all duration-500 relative z-10" />
+                <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-2xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10 transition-all duration-500 relative z-10" />
                 <h3 className="text-lg md:text-2xl font-bold mb-2 text-blue-100 text-center uppercase drop-shadow futuristic-font transition-all duration-500 relative z-10 bg-gradient-to-r from-[#60a5fa] via-[#facc15] to-[#818cf8] bg-clip-text text-transparent">
                   {project.title}
                 </h3>
@@ -146,13 +146,14 @@ function CoverflowWebProjects({ projects }) {
               </motion.div>
             );
           }
-          const blur = 'backdrop-blur-[6px] blur-[2px] grayscale opacity-70';
+          // Correction : le flou ne doit s'appliquer qu'à partir de sm (mobile: pas de blur)
+          const blur = 'sm:backdrop-blur-[6px] sm:blur-[2px] grayscale opacity-70';
           const shadow = 'shadow-[0_1px_6px_#6366f188]';
           const border = 'border border-indigo-400/20';
           return (
             <motion.div
               key={i}
-              className={`absolute left-1/2 top-1/2 w-64 h-80 md:w-80 md:h-96 flex flex-col items-center justify-center ${blur} ${shadow} ${border} transition-all duration-700 ease-[cubic-bezier(.77,0,.18,1)]`}
+              className={`absolute left-1/2 top-1/2 w-64 h-80 md:w-80 md:h-96 flex flex-col items-center justify-center rounded-3xl ${blur} ${shadow} ${border} transition-all duration-700 ease-[cubic-bezier(.77,0,.18,1)]`}
               style={{
                 zIndex,
                 transform: `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) perspective(1200px) rotateY(${rotateY}deg)`
@@ -162,7 +163,7 @@ function CoverflowWebProjects({ projects }) {
               tabIndex={0}
               onClick={() => setActive(i)}
             >
-              <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10 transition-all duration-500" />
+              <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-2xl shadow-lg mb-4 border-2 border-indigo-400 bg-white/10 transition-all duration-500" />
               <h3 className="text-lg md:text-2xl font-bold mb-2 text-blue-200 text-center uppercase drop-shadow futuristic-font transition-all duration-500">{project.title}</h3>
               <p className="text-gray-200 mb-3 text-sm md:text-base opacity-90 text-center px-2 transition-all duration-500">{project.description}</p>
               <a
