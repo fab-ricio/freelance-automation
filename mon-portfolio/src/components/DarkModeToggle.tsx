@@ -58,12 +58,13 @@ const DarkModeToggle: React.FC = () => {
       <motion.button
         onClick={toggleDarkMode}
         aria-label="Toggle Dark Mode"
-        className="fixed right-4 bottom-8 md:right-8 md:bottom-12 w-12 h-12 rounded-full bg-yellow-200 dark:bg-gray-700 flex items-center justify-center shadow-lg cursor-pointer z-[100] border-2 border-yellow-300 dark:border-gray-600 transition-all duration-500"
-        style={{ boxShadow: isDark ? '0 0 24px #6366f1' : '0 0 24px #fde68a' }}
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
+        className="fixed right-4 bottom-24 md:right-8 md:bottom-32 w-12 h-12 rounded-full bg-yellow-200 dark:bg-gray-700 flex items-center justify-center shadow-lg cursor-pointer z-[120] border-2 border-yellow-300 dark:border-gray-600 transition-all duration-500 will-change-transform"
+        style={{ boxShadow: isDark ? '0 0 24px #6366f1' : '0 0 24px #fde68a', pointerEvents: 'auto' }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
         title="Changer le mode clair/sombre"
         id="darkmode-toggle-btn"
+        drag={false}
       >
         <AnimatePresence mode="wait">
           {isDark ? (
