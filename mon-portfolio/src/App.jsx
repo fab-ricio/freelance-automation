@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
-import DarkModeToggle from './components/DarkModeToggle';
+import DarkModeToggle from './components/DarkModeToggle.tsx';
 import StickyDarkModeHelper from './components/StickyDarkModeHelper';
 
 function App() {
