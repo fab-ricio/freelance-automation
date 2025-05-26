@@ -14,17 +14,17 @@ const Footer = () => {
       <div className="z-20 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-[#e0e7ff]/90 dark:text-blue-100/90 font-light">
         <span className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-[#facc15] animate-pulse" />
-          <span className="tracking-wide font-semibold">&copy; {new Date().getFullYear()} Ton Nom</span>
+          <span className="tracking-wide font-semibold">&copy; {new Date().getFullYear()} Fabricio</span>
         </span>
         <span className="hidden sm:inline text-blue-300/40">|</span>
         <span className="flex items-center gap-2">
           <svg className="w-4 h-4 text-[#facc15] opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25V6.75A2.25 2.25 0 0 0 18.75 4.5h-13.5A2.25 2.25 0 0 0 3 6.75v10.5A2.25 2.25 0 0 0 5.25 19.5h13.5A2.25 2.25 0 0 0 21 17.25v-1.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25l-9 6.75-9-6.75" /></svg>
-          <a href="mailto:email@domaine.com" className="underline hover:text-[#facc15] transition">email@domaine.com</a>
+          <a href="mailto:elysefabricio003@gmail.com" className="underline hover:text-[#facc15] transition">elysefabricio003@gmail.com</a>
         </span>
         <span className="hidden sm:inline text-blue-300/40">|</span>
         <span className="flex items-center gap-2">
           <svg className="w-4 h-4 text-[#60a5fa] opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0-1.243 1.007-2.25 2.25-2.25h2.25c.966 0 1.797.63 2.09 1.553l.72 2.16a2.25 2.25 0 0 1-.516 2.34l-1.08 1.08a15.045 15.045 0 0 0 6.36 6.36l1.08-1.08a2.25 2.25 0 0 1 2.34-.516l2.16.72A2.25 2.25 0 0 1 19.5 17.25v2.25a2.25 2.25 0 0 1-2.25 2.25C7.798 21.75 2.25 16.202 2.25 9.75z" /></svg>
-          <a href="tel:+33612345678" className="underline hover:text-[#facc15] transition">06 12 34 56 78</a>
+          <a href="tel:+33612345678" className="underline hover:text-[#facc15] transition">068 00 754 77</a>
         </span>
       </div>
       {/* Réseaux sociaux */}
