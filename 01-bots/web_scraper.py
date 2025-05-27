@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
-import tkinter as tk
+import tkinter as tky
 from tkinter import ttk, scrolledtext
 from tkinter import messagebox
+import tkinter as tk
 
 def scrape_article_titles(url):
     """
@@ -45,52 +46,62 @@ class WebScraperGUI:
         self.root = root
         self.root.title("Web Scraper - Extracteur de Titres")
         self.root.geometry("800x600")
-        
-        # Configuration du style
+        try:
+            self.root.iconbitmap(False, 'favicon.ico')  # Ajout d'une icône si disponible
+        except Exception:
+            pass
+        # Thème moderne
         style = ttk.Style()
-        style.configure("TButton", padding=6, relief="flat", background="#ccc")
-        style.configure("TLabel", padding=6)
-        style.configure("TEntry", padding=6)
-        
+        if 'clam' in style.theme_names():
+            style.theme_use('clam')
+        style.configure("TButton", padding=8, relief="flat", background="#4F8A8B", foreground="#fff", font=("Segoe UI", 11, "bold"))
+        style.map("TButton", background=[('active', '#395B64')])
+        style.configure("TLabel", padding=6, font=("Segoe UI", 11))
+        style.configure("TEntry", padding=6, font=("Segoe UI", 11))
         # Création des widgets
         self.create_widgets()
-        
+
     def create_widgets(self):
-        # Frame principal
-        main_frame = ttk.Frame(self.root, padding="10")
-        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-        
+        main_frame = ttk.Frame(self.root, padding="15 10 15 10")
+        main_frame.grid(row=0, column=0, sticky="nsew")
+        # Rendre la fenêtre principale responsive
+        self.root.columnconfigure(0, weight=1)
+        self.root.rowconfigure(0, weight=1)
+        main_frame.columnconfigure(0, weight=1)
+        main_frame.columnconfigure(1, weight=1)
+        main_frame.columnconfigure(2, weight=1)
+        main_frame.rowconfigure(4, weight=1)
         # Label et champ pour l'URL
-        ttk.Label(main_frame, text="Entrez l'URL du site web:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        ttk.Label(main_frame, text="Entrez l'URL du site web:").grid(row=0, column=0, sticky="w", pady=5, columnspan=3)
         self.url_entry = ttk.Entry(main_frame, width=70)
-        self.url_entry.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=5)
+        self.url_entry.grid(row=1, column=0, columnspan=3, sticky="ew", pady=5)
         self.url_entry.insert(0, "https://example.com")
-        
-        # Bouton pour lancer le scraping
+        self.url_entry.focus()
+        # Boutons
         self.scrape_button = ttk.Button(main_frame, text="Extraire les titres", command=self.scrape_url)
-        self.scrape_button.grid(row=2, column=0, columnspan=2, pady=10)
-        
+        self.scrape_button.grid(row=2, column=0, pady=10, sticky="ew")
+        self.copy_button = ttk.Button(main_frame, text="Copier les résultats", command=self.copy_results)
+        self.copy_button.grid(row=2, column=1, pady=10, sticky="ew")
+        self.clear_button = ttk.Button(main_frame, text="Effacer", command=self.clear_all)
+        self.clear_button.grid(row=2, column=2, pady=10, sticky="ew")
         # Zone de texte pour afficher les résultats
-        ttk.Label(main_frame, text="Résultats:").grid(row=3, column=0, sticky=tk.W, pady=5)
-        self.result_text = scrolledtext.ScrolledText(main_frame, width=80, height=20)
-        self.result_text.grid(row=4, column=0, columnspan=2, pady=5)
-        
+        ttk.Label(main_frame, text="Résultats:").grid(row=3, column=0, sticky="w", pady=5, columnspan=3)
+        self.result_text = scrolledtext.ScrolledText(main_frame, width=80, height=20, font=("Consolas", 11))
+        self.result_text.grid(row=4, column=0, columnspan=3, pady=5, sticky="nsew")
         # Status bar
         self.status_var = tk.StringVar()
         self.status_var.set("Prêt")
-        status_bar = ttk.Label(main_frame, textvariable=self.status_var, relief=tk.SUNKEN, anchor=tk.W)
-        status_bar.grid(row=5, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=5)
-        
+        status_bar = ttk.Label(main_frame, textvariable=self.status_var, relief=tk.SUNKEN, anchor="w")
+        status_bar.grid(row=5, column=0, columnspan=3, sticky="ew", pady=5)
+
     def scrape_url(self):
         url = self.url_entry.get().strip()
         if not url:
             messagebox.showerror("Erreur", "Veuillez entrer une URL valide")
             return
-            
         self.status_var.set("Extraction en cours...")
         self.scrape_button.state(['disabled'])
         self.result_text.delete(1.0, tk.END)
-        
         try:
             titles = scrape_article_titles(url)
             if titles:
@@ -108,10 +119,25 @@ class WebScraperGUI:
         finally:
             self.scrape_button.state(['!disabled'])
 
+    def copy_results(self):
+        results = self.result_text.get(1.0, tk.END).strip()
+        if results:
+            self.root.clipboard_clear()
+            self.root.clipboard_append(results)
+            self.status_var.set("Résultats copiés dans le presse-papiers")
+        else:
+            self.status_var.set("Aucun résultat à copier")
+
+    def clear_all(self):
+        self.url_entry.delete(0, tk.END)
+        self.result_text.delete(1.0, tk.END)
+        self.status_var.set("Champs réinitialisés")
+        self.url_entry.focus()
+
 def main():
     root = tk.Tk()
     app = WebScraperGUI(root)
     root.mainloop()
 
 if __name__ == "__main__":
-    main() 
+    main()
