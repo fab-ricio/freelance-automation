@@ -49,68 +49,93 @@ class BitcoinAlerteGUI:
         # Frame principal
         main_frame = ctk.CTkFrame(self.root)
         main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        
+        main_frame.grid_rowconfigure(0, weight=1)
+        main_frame.grid_columnconfigure(0, weight=1)
+        main_frame.grid_columnconfigure(1, weight=2)
+
         # Frame gauche pour les contrôles
-        frame_gauche = ctk.CTkFrame(main_frame)
-        frame_gauche.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5)
-        
-        # Configuration email
-        ctk.CTkLabel(frame_gauche, text="Configuration Email", font=("Helvetica", 16, "bold")).pack(pady=10)
-        
-        # Champs email
-        ctk.CTkLabel(frame_gauche, text="Email expéditeur:").pack(pady=5)
-        self.email_expediteur = ctk.CTkEntry(frame_gauche, width=300)
+        frame_gauche = ctk.CTkFrame(main_frame, corner_radius=15)
+        frame_gauche.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        frame_gauche.grid_rowconfigure(99, weight=1)
+
+        # Frame droite pour le graphique
+        frame_droite = ctk.CTkFrame(main_frame, corner_radius=15)
+        frame_droite.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
+        frame_droite.grid_rowconfigure(0, weight=1)
+        frame_droite.grid_columnconfigure(0, weight=1)
+
+        # Onglets pour organisation
+        tabview = ctk.CTkTabview(frame_gauche, width=400)
+        tabview.pack(fill=tk.BOTH, expand=False, pady=5)
+        tab_config = tabview.add("Configuration")
+        tab_logs = tabview.add("Logs")
+
+        # --- Configuration Email ---
+        ctk.CTkLabel(tab_config, text="Configuration Email", font=("Helvetica", 16, "bold")).pack(pady=(10, 0))
+        ctk.CTkLabel(tab_config, text="Email expéditeur:").pack(pady=5)
+        self.email_expediteur = ctk.CTkEntry(tab_config, width=300)
         self.email_expediteur.pack(pady=5)
         self.email_expediteur.insert(0, EMAIL_CONFIG['expediteur'])
-        
-        ctk.CTkLabel(frame_gauche, text="Email destinataire:").pack(pady=5)
-        self.email_destinataire = ctk.CTkEntry(frame_gauche, width=300)
+        ctk.CTkLabel(tab_config, text="Email destinataire:").pack(pady=5)
+        self.email_destinataire = ctk.CTkEntry(tab_config, width=300)
         self.email_destinataire.pack(pady=5)
         self.email_destinataire.insert(0, EMAIL_CONFIG['destinataire'])
-        
-        ctk.CTkLabel(frame_gauche, text="Mot de passe:").pack(pady=5)
-        self.mot_de_passe = ctk.CTkEntry(frame_gauche, width=300, show="*")
+        ctk.CTkLabel(tab_config, text="Mot de passe:").pack(pady=5)
+        self.mot_de_passe = ctk.CTkEntry(tab_config, width=300, show="*")
         self.mot_de_passe.pack(pady=5)
         self.mot_de_passe.insert(0, EMAIL_CONFIG['mot_de_passe'])
+        # Bouton afficher/masquer mot de passe
+        self.show_pwd = False
+        def toggle_pwd():
+            self.show_pwd = not self.show_pwd
+            self.mot_de_passe.configure(show='' if self.show_pwd else '*')
+            btn_pwd.configure(text='Cacher' if self.show_pwd else 'Afficher')
+        btn_pwd = ctk.CTkButton(tab_config, text="Afficher", width=80, command=toggle_pwd)
+        btn_pwd.pack(pady=(0, 10))
 
-        # Paramètres de surveillance
-        ctk.CTkLabel(frame_gauche, text="Paramètres de Surveillance", font=("Helvetica", 16, "bold")).pack(pady=10)
-        
-        ctk.CTkLabel(frame_gauche, text="Seuil de variation (%):").pack(pady=5)
-        self.seuil_variation = ctk.CTkEntry(frame_gauche, width=100)
+        # --- Paramètres de surveillance ---
+        ctk.CTkLabel(tab_config, text="Paramètres de Surveillance", font=("Helvetica", 16, "bold")).pack(pady=10)
+        ctk.CTkLabel(tab_config, text="Seuil de variation (%):").pack(pady=5)
+        self.seuil_variation = ctk.CTkEntry(tab_config, width=100)
         self.seuil_variation.pack(pady=5)
         self.seuil_variation.insert(0, str(SEUIL_VARIATION))
-        
-        ctk.CTkLabel(frame_gauche, text="Intervalle (secondes):").pack(pady=5)
-        self.intervalle = ctk.CTkEntry(frame_gauche, width=100)
+        ctk.CTkLabel(tab_config, text="Intervalle (secondes):").pack(pady=5)
+        self.intervalle = ctk.CTkEntry(tab_config, width=100)
         self.intervalle.pack(pady=5)
         self.intervalle.insert(0, str(INTERVALLE_VERIFICATION))
-        
         # Boutons de contrôle
-        self.bouton_demarrer = ctk.CTkButton(frame_gauche, text="Démarrer la surveillance", command=self.demarrer_surveillance)
-        self.bouton_demarrer.pack(pady=10)
-        
-        # Zone de logs
-        ctk.CTkLabel(frame_gauche, text="Logs:", font=("Helvetica", 16, "bold")).pack(pady=5)
-        self.zone_logs = scrolledtext.ScrolledText(frame_gauche, width=50, height=10)
-        self.zone_logs.pack(pady=5)
-        
+        btns_frame = ctk.CTkFrame(tab_config, fg_color="transparent")
+        btns_frame.pack(pady=10)
+        self.bouton_demarrer = ctk.CTkButton(btns_frame, text="Démarrer la surveillance", command=self.demarrer_surveillance, width=180)
+        self.bouton_demarrer.pack(side=tk.LEFT, padx=5)
+        self.bouton_clear_logs = ctk.CTkButton(btns_frame, text="Effacer les logs", command=self.clear_logs, width=120)
+        self.bouton_clear_logs.pack(side=tk.LEFT, padx=5)
+        # Indicateur d'activité
+        self.progress = ctk.CTkProgressBar(tab_config, width=200)
+        self.progress.pack(pady=5)
+        self.progress.set(0)
+
+        # --- Zone de logs ---
+        ctk.CTkLabel(tab_logs, text="Logs", font=("Consolas", 14, "bold")).pack(pady=5)
+        self.zone_logs = scrolledtext.ScrolledText(tab_logs, width=50, height=15, bg="#23272e", fg="#d1d5db", font=("Consolas", 11))
+        self.zone_logs.pack(pady=5, fill=tk.BOTH, expand=True)
+
         # Status bar
         self.status_var = tk.StringVar()
         self.status_var.set("Prêt")
-        status_bar = ctk.CTkLabel(frame_gauche, textvariable=self.status_var)
-        status_bar.pack(pady=5)
-        
-        # Frame droite pour le graphique
-        frame_droite = ctk.CTkFrame(main_frame)
-        frame_droite.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=5)
-        
-        # Graphique
-        self.graphique = ctk.CTkCanvas(frame_droite, width=500, height=400, bg='#2b2b2b')
+        status_bar = ctk.CTkLabel(tab_logs, textvariable=self.status_var)
+        status_bar.pack(pady=5, fill=tk.X)
+
+        # --- Graphique ---
+        self.graphique = ctk.CTkCanvas(frame_droite, width=500, height=400, bg='#2b2b2b', highlightthickness=0)
         self.graphique.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
-        
+
         # Chargement de l'historique
         self.charger_historique()
+
+    def clear_logs(self):
+        self.zone_logs.delete(1.0, tk.END)
+        self.status_var.set("Logs effacés")
     
     def dessiner_graphique(self):
         """Dessine le graphique des prix"""
@@ -213,20 +238,20 @@ class BitcoinAlerteGUI:
             except ValueError as e:
                 messagebox.showerror("Erreur", "Veuillez entrer des valeurs numériques valides pour le seuil et l'intervalle")
                 return
-            
             self.surveillance_active = True
             self.thread_surveillance = threading.Thread(target=self.surveillance_continue)
             self.thread_surveillance.daemon = True
             self.thread_surveillance.start()
-            
             self.bouton_demarrer.configure(text="Arrêter la surveillance")
             self.status_var.set("Surveillance active")
             self.log("Surveillance démarrée")
+            self.progress.set(1)
         else:
             self.surveillance_active = False
             self.bouton_demarrer.configure(text="Démarrer la surveillance")
             self.status_var.set("Surveillance arrêtée")
             self.log("Surveillance arrêtée")
+            self.progress.set(0)
     
     def surveillance_continue(self):
         """Fonction de surveillance continue"""
@@ -323,4 +348,4 @@ def main():
     root.mainloop()
 
 if __name__ == "__main__":
-    main() 
+    main()
